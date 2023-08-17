@@ -20,7 +20,8 @@ use App\Http\Controllers\Api\UserController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/users', [UserController::class, 'get']);
-
-//Route::group(['middleware' => ['auth:sanctum']], function () {
-//});
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['middleware' => ['role:ADMIN']], function () {
+        Route::get('/users', [UserController::class, 'get']);
+    });
+});
