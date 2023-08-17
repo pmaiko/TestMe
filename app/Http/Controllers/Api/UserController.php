@@ -8,7 +8,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    function get () {
+    function getAll () {
       $users = User::all();
       return response()->json($users);
     }

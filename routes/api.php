@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use \App\Http\Controllers\Api\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['role:ADMIN']], function () {
-        Route::get('/users', [UserController::class, 'get']);
+        Route::get('/users', [UserController::class, 'getAll']);
+
+        //test
+        Route::post('/test', [TestController::class, 'create']);
+        Route::put('/test', [TestController::class, 'update']);
+        Route::delete('/test', [TestController::class, 'delete']);
     });
+    Route::get('/tests', [TestController::class, 'getAll']);
+    Route::get('/test/{testId}/questions', [TestController::class, 'testQuestions']);
 });
