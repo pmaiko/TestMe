@@ -13,7 +13,7 @@ class TestController extends Controller
         return Test::all();
     }
 
-    public function testQuestions (Request $request) {
+    public function test (Request $request) {
         $test = Test::where('id', $request->testId)->first();
         if (!$test) {
             abort(404);

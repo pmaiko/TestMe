@@ -145,7 +145,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
-        'test_not_found' => 'Тест не найден!'
+        'test_not_found' => 'Тест не знайдено!',
+        'question_not_found' => 'Питання не знайдено!',
+        'answer_not_found' => 'Відповідь не знайдено!'
     ],
 
     /*

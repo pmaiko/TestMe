@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use \App\Http\Controllers\Api\TestController;
+use \App\Http\Controllers\Api\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/test', [TestController::class, 'create']);
         Route::put('/test', [TestController::class, 'update']);
         Route::delete('/test', [TestController::class, 'delete']);
+        //question
+        Route::post('/question', [QuestionController::class, 'create']);
+        Route::put('/question', [QuestionController::class, 'update']);
+        Route::delete('/question', [QuestionController::class, 'delete']);
     });
     Route::get('/tests', [TestController::class, 'getAll']);
-    Route::get('/test/{testId}/questions', [TestController::class, 'testQuestions']);
+    Route::get('/test/{testId}', [TestController::class, 'test']);
 });
