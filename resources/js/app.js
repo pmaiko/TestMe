@@ -1,3 +1,9 @@
+import { createI18n } from 'vue3-i18n'
+import router from './router'
+import store from '~/store'
+
+import uk from '~/lang/uk'
+
 import { createApp } from 'vue'
 import App from './components/App'
 
@@ -16,6 +22,18 @@ const vuetify = createVuetify({
 })
 
 require('./bootstrap')
-const app = createApp(App).use(vuetify)
+
+const i18n = createI18n({
+  locale: 'uk',
+  fallbackLocale: 'zhCN',
+  messages: {
+    'uk': uk
+  }
+})
+const app = createApp(App)
+  .use(vuetify)
+  .use(store)
+  .use(router)
+  .use(i18n)
 
 app.mount('#app')

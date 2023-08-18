@@ -17,6 +17,6 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/he', function () {
-    return 'Привет';
-});
+Route::get('/{any}', function () {
+    return view('index');
+})->where('any', '.*');
