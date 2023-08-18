@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\ResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/favorites', [FavoriteController::class, 'getAll']);
     Route::post('/favorite', [FavoriteController::class, 'create']);
     Route::delete('/favorite', [FavoriteController::class, 'delete']);
+    //result
+    Route::get('/results', [ResultController::class, 'getAll']);
+    Route::post('/result', [ResultController::class, 'create']);
 });

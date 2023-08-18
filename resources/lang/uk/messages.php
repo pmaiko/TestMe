@@ -10,4 +10,5 @@ return [
     'answers_all_deleted' => 'Всі відповіді до питання видаленно',
     'favorite_question_added' => 'Питання додано до улюблених',
     'favorite_question_deleted' => 'Питання видалено з улюблених',
+    'result_saved' => 'Результат збережено',
 ];
