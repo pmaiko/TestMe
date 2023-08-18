@@ -147,7 +147,8 @@ return [
         ],
         'test_not_found' => 'Тест не знайдено!',
         'question_not_found' => 'Питання не знайдено!',
-        'answer_not_found' => 'Відповідь не знайдено!'
+        'answer_not_found' => 'Відповідь не знайдено!',
+        'favorite_not_found' => 'Улюблене не найдено!'
     ],
 
     /*

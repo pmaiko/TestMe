@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
-use \App\Http\Controllers\Api\TestController;
-use \App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\QuestionController;
+use App\Http\Controllers\Api\FavoriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::get('/tests', [TestController::class, 'getAll']);
     Route::get('/test/{testId}', [TestController::class, 'test']);
+    //favorite
+    Route::get('/favorites', [FavoriteController::class, 'getAll']);
+    Route::post('/favorite', [FavoriteController::class, 'create']);
+    Route::delete('/favorite', [FavoriteController::class, 'delete']);
 });

@@ -46,7 +46,7 @@ class QuestionController extends Controller
             $response = [
                 'success' => true,
                 'message' => __('messages.question_created'),
-                'test' => $question
+                'question' => $question
             ];
 
             return response($response, 201);
