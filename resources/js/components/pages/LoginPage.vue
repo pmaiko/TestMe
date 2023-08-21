@@ -12,26 +12,98 @@
         sm="8"
         md="3"
       >
-        {{ $t('enterToSystem') }}
-        <v-form>
-          <v-text-field label="Email" />
-          <v-text-field label="Password" />
+        <!--<v-alert-->
+        <!--  text="успих"-->
+        <!--  type="success"-->
+        <!--/>-->
+        <p class="text-h5 text-center mb-4">
+          {{ $t('enterToSystem') }}
+        </p>
+        <v-form @submit.prevent="onSubmit">
+          <v-text-field
+            v-model="formData['email']"
+            :label="$t('email')"
+            :error-messages="errors['email']"
+            name="email"
+            type="email"
+          />
+          <v-text-field
+            v-model="formData['password']"
+            :label="$t('password')"
+            :error-messages="errors['password']"
+            name="password"
+            type="password"
+          />
 
           <v-btn
-            block
+            :loading="loading"
+            type="submit"
             color="green"
             size="x-large"
+            class="w-100"
           >
-            Sign in
+            {{ $t('enter') }}
           </v-btn>
+          <ModalRegister />
         </v-form>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
+  import ModalRegister from '~/components/ModalRegister'
+
+  import * as api from '~/api'
+
+  import { ref, reactive } from 'vue'
+  import { useStore } from 'vuex'
+  import { useRouter } from 'vue-router'
+
   export default {
-    name: 'LoginPage'
+    name: 'LoginPage',
+
+    components: {
+      ModalRegister
+    },
+
+    setup () {
+      const store = useStore()
+      const router = useRouter()
+
+      const formData = reactive({
+        email: null,
+        password: null
+      })
+
+      const errors = ref({})
+      const loading = ref(false)
+
+      const onSubmit = async () => {
+        try {
+          loading.value = true
+          const { data } = await api.login(formData)
+          store.dispatch('auth/setToken', {
+            token: data.token
+          })
+          store.dispatch('auth/setUser', {
+            user: data.user
+          })
+          router.replace('/cabinet')
+        } catch (error) {
+          console.error(error)
+          errors.value = _get(error, 'response.data.errors') || {}
+        } finally {
+          loading.value = false
+        }
+      }
+
+      return {
+        formData,
+        errors,
+        loading,
+        onSubmit
+      }
+    }
   }
 </script>
 <style lang="scss">

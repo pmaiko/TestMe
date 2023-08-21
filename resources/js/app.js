@@ -23,6 +23,7 @@ const vuetify = createVuetify({
 
 require('./bootstrap')
 
+
 const i18n = createI18n({
   locale: 'uk',
   fallbackLocale: 'zhCN',
@@ -35,5 +36,12 @@ const app = createApp(App)
   .use(store)
   .use(router)
   .use(i18n)
+
+await store.dispatch('auth/checkLogged')
+if (store.getters['auth/logged']) {
+  router.replace('/cabinet')
+} else {
+  router.replace('/')
+}
 
 app.mount('#app')
