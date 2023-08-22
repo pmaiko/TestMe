@@ -1,12 +1,11 @@
 <template>
-  <div class="page-content login-page">
-    123123
+  <div class="cabinet-page">
+    <v-container fluid>
+      cabinet-page
+    </v-container>
   </div>
 </template>
-<script>
-  export default {
-    name: 'CabinetPage'
-  }
+<script setup>
 </script>
 <style lang="scss">
 

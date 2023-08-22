@@ -19,3 +19,10 @@ export const logout = async () => {
     method: 'POST'
   })
 }
+
+export const tests = async () => {
+  return window.axios({
+    url: '/tests',
+    method: 'GET'
+  })
+}

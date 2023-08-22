@@ -37,9 +37,11 @@ const app = createApp(App)
   .use(router)
   .use(i18n)
 
+app.config.globalProperties._get = _get
+
 await store.dispatch('auth/checkLogged')
 if (store.getters['auth/logged']) {
-  router.replace('/cabinet')
+  //
 } else {
   router.replace('/')
 }

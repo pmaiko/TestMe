@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="page-content login-page fill-height"
+    class="login-page fill-height"
   >
     <v-row
       align="center"
@@ -56,8 +56,7 @@
   import * as api from '~/api'
 
   import { ref, reactive } from 'vue'
-  import { useStore } from 'vuex'
-  import { useRouter } from 'vue-router'
+  import { useAuth } from '~/hooks/useAuth'
 
   export default {
     name: 'LoginPage',
@@ -67,8 +66,7 @@
     },
 
     setup () {
-      const store = useStore()
-      const router = useRouter()
+      const { setToken, setUser, redirectToCabinet } = useAuth()
 
       const formData = reactive({
         email: null,
@@ -82,13 +80,10 @@
         try {
           loading.value = true
           const { data } = await api.login(formData)
-          store.dispatch('auth/setToken', {
-            token: data.token
-          })
-          store.dispatch('auth/setUser', {
-            user: data.user
-          })
-          router.replace('/cabinet')
+
+          setToken(data.token)
+          setUser(data.user)
+          redirectToCabinet()
         } catch (error) {
           console.error(error)
           errors.value = _get(error, 'response.data.errors') || {}
