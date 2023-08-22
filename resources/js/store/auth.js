@@ -11,7 +11,8 @@ export default {
   getters: {
     token: state => state.token,
     user: state => state.user,
-    logged: state => !!state.token
+    logged: state => !!state.token,
+    role: state => _get(state, 'user.role', '')
   },
 
   mutations: {

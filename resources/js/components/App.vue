@@ -48,53 +48,65 @@
     </v-app-bar>
 
     <v-main>
-      <Suspense>
-        <router-view class="page-content" />
-      </Suspense>
+      <router-view class="page-content" />
     </v-main>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="2000"
+    >
+      {{ snackbarText }}
+
+      <template #actions>
+        <v-btn
+          color="blue"
+          variant="text"
+          @click="snackbar = false"
+        >
+          {{ $t('close') }}
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
-<script>
-  import { ref } from 'vue'
+<script setup>
+  import { ref, provide } from 'vue'
   // import { useRouter } from 'vue-router'
   import { useI18n } from 'vue3-i18n'
   import { useAuth } from '~/hooks/useAuth'
+  const { logged, user, logout } = useAuth()
+  // const router = useRouter()
+  const { t: $t } = useI18n()
 
-  export default {
-    setup () {
-      const { logged, user, logout } = useAuth()
-      // const router = useRouter()
-      const { t: $t } = useI18n()
-
-      const items = ref([
-        {
-          label: $t('menu.tests'),
-          path: '/cabinet/tests',
-          name: 'tests'
-        },
-        {
-          label: $t('menu.results'),
-          path: '/cabinet/results',
-          name: 'results'
-        },
-        {
-          label: $t('menu.users'),
-          path: '/cabinet/users',
-          name: 'users'
-        },
-        {
-          label: $t('menu.settings'),
-          path: '/cabinet/settings',
-          name: 'settings'
-        }
-      ])
-
-      return {
-        items,
-        logged,
-        user,
-        logout
-      }
+  const items = ref([
+    {
+      label: $t('menu.tests'),
+      path: '/cabinet/tests',
+      name: 'tests'
+    },
+    {
+      label: $t('menu.results'),
+      path: '/cabinet/results',
+      name: 'results'
+    },
+    {
+      label: $t('menu.users'),
+      path: '/cabinet/users',
+      name: 'users'
+    },
+    {
+      label: $t('menu.settings'),
+      path: '/cabinet/settings',
+      name: 'settings'
     }
+  ])
+
+  const snackbar = ref(false)
+  const snackbarText = ref(false)
+
+  const showSnackbar = (text) => {
+    snackbar.value = true
+    snackbarText.value = text
   }
+  provide('showSnackbar', showSnackbar)
 </script>

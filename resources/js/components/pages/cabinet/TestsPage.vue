@@ -1,68 +1,85 @@
 <template>
-  <div class="tests-page">
-    <v-container fluid>
-      <v-row>
-        <v-col
-          v-for="(test, index) in tests"
-          :key="index"
-          md="4"
-          sm="6"
-          xs="12"
-        >
-          <v-card
-            class="mx-auto"
+  <v-container
+    fluid
+    class="tests-page h-100"
+  >
+    <v-row v-if="!loading">
+      <v-col
+        v-if="!_get(tests, 'length', '')"
+        cols="12"
+      >
+        <VEmpty>
+          {{ $t('emptyTests') }}
+        </VEmpty>
+      </v-col>
+      <v-col
+        v-else
+      >
+        <v-row v-if="isAdmin">
+          <router-link :to="{ name: 'test-create' }">
+            <v-btn
+              color="blue"
+              variant="flat"
+              class="text-capitalize mx-2 my-2"
+            >
+              <template #prepend>
+                <v-icon icon="mdi mdi-plus" />
+              </template>
+              {{ $t('createTest') }}
+            </v-btn>
+          </router-link>
+        </v-row>
+        <v-row class="flex-wrap">
+          <v-col
+            v-for="(test, index) in tests"
+            :key="index"
+            md="4"
+            sm="6"
+            cols="12"
+            class="h-auto"
           >
-            <v-card-item>
-              <div>
-                <div class="text-overline mb-1">
-                  {{ useFormattedDate(_get(test, 'created_at', '')).formattedDateTime }}
-                </div>
-                <div class="text-h5 mb-1 font-weight-bold">
-                  {{ _get(test, 'name', '') }}
-                </div>
-                <div class="text-caption">
-                  {{ _get(test, 'description', '') }}
-                </div>
-              </div>
-            </v-card-item>
-
-            <v-card-actions>
-              <v-btn
-                color="primary"
-                variant="flat"
-                class="text-capitalize"
-              >
-                <template #prepend>
-                  <v-icon icon="mdi-pencil"></v-icon>
-                </template>
-                {{ $t('change') }}
-              </v-btn>
-              <v-btn
-                color="success"
-                variant="flat"
-                class="text-capitalize"
-              >
-                {{ $t('toStart') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+            <TestCard
+              v-bind="test"
+              @update="getTests"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+    <VLoader
+      v-else
+    />
+  </v-container>
 </template>
 <script setup>
+  import VLoader from '~/components/UI/VLoader'
+  import VEmpty from '~/components/UI/VEmpty'
+  import TestCard from '~/components/shared/TestCard'
+
   import * as api from '~/api'
-  import { ref } from 'vue'
-  import { useFormattedDate } from '~/hooks/useDate'
+  import { ref, onMounted } from 'vue'
+  import { useAuth } from '~/hooks/useAuth'
+
+  const { isAdmin } = useAuth()
 
   const tests = ref([])
-  try {
-    const { data } = await api.tests()
-    tests.value = data
-  } catch (error) {
-    console.error(error)
+  const loading = ref(true)
+
+  const getTests = async () => {
+    try {
+      loading.value = true
+      const { data } = await api.tests()
+      tests.value = data
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
   }
+
+  onMounted(() => {
+    getTests()
+  })
 </script>
 <style lang="scss">
 

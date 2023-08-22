@@ -1,3 +1,4 @@
+import './bootstrap'
 import { createI18n } from 'vue3-i18n'
 import router from './router'
 import store from '~/store'
@@ -21,8 +22,6 @@ const vuetify = createVuetify({
   directives
 })
 
-require('./bootstrap')
-
 
 const i18n = createI18n({
   locale: 'uk',
@@ -40,10 +39,17 @@ const app = createApp(App)
 app.config.globalProperties._get = _get
 
 await store.dispatch('auth/checkLogged')
-if (store.getters['auth/logged']) {
-  //
-} else {
-  router.replace('/')
-}
+router.beforeEach(async (to, from) => {
+  const logged = store.getters['auth/logged']
+  if (!logged && to.name !== 'login') {
+    return {
+      name: 'login'
+    }
+  } if (logged && to.name === 'login') {
+    return {
+      name: 'tests'
+    }
+  }
+})
 
 app.mount('#app')

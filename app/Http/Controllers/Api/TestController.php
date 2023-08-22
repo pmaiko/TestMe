@@ -31,7 +31,7 @@ class TestController extends Controller
     public function create (Request $request) {
         $fields = $request->validate([
             "name" => "required|string",
-            "description" => "string"
+            "description" => "nullable|string"
         ]);
 
         $test = Test::create($fields);
@@ -49,7 +49,7 @@ class TestController extends Controller
         $fields = $request->validate([
             "id" => "required",
             "name" => "string",
-            "description" => "string"
+            "description" => "nullable|string"
         ]);
 
         $test = Test::where("id", $fields['id'])->first();
@@ -69,7 +69,7 @@ class TestController extends Controller
             $updateData['name'] = $fields['name'];
         }
 
-        if (isset($fields['description'])) {
+        if (isset($fields['description']) || $fields['description'] === null) {
             $updateData['description'] = $fields['description'];
         }
 

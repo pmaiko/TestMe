@@ -16,11 +16,11 @@ class QuestionController extends Controller
         $fields = $request->validate([
             "test_id" => "required|string",
             "question" => "required|string",
-            "description" => "string",
+            "description" => "nullable|string",
 
             "answers" => "required|array",
             "answers.*.answer" => "required|string",
-            "answers.*.description" => "string",
+            "answers.*.description" => "nullable|string",
             "answers.*.correct" => "boolean",
         ]);
 
@@ -67,12 +67,12 @@ class QuestionController extends Controller
             "question_id" => "required|string",
 
             "question" => "string",
-            "description" => "string",
+            "description" => "nullable|string",
 
             "answers" => "array|nullable",
             "answers.*.answer_id" => "string",
             "answers.*.answer" => "required_without:answers.*.answer_id|string",
-            "answers.*.description" => "string",
+            "answers.*.description" => "nullable|string",
             "answers.*.correct" => "boolean",
 //            "answers.*.answer" => "required_with:answers.*.answer_id|string", // Обязательное поле, если answer_id присутствует
         ]);
@@ -93,7 +93,7 @@ class QuestionController extends Controller
         if (isset($fields['question'])) {
             $updateQuestionData['question'] = $fields['question'];
         }
-        if (isset($fields['description'])) {
+        if (isset($fields['description']) || $fields['description'] === null) {
             $updateQuestionData['description'] = $fields['description'];
         }
         $question->update($updateQuestionData);
@@ -121,7 +121,7 @@ class QuestionController extends Controller
                     if (isset($answer['answer'])) {
                         $updateAnswerData['answer'] = $answer['answer'];
                     }
-                    if (isset($answer['description'])) {
+                    if (isset($answer['description']) || $answer['description'] === null) {
                         $updateAnswerData['description'] = $answer['description'];
                     }
                     if (isset($answer['correct'])) {

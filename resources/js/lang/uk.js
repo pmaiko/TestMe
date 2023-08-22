@@ -17,5 +17,34 @@ export default {
     settings: 'Налаштування'
   },
   change: 'Змінити',
-  toStart: 'Розпочати'
+  toStart: 'Розпочати',
+  edit: 'Редагувати',
+  delete: 'Видалили',
+  emptyTests: 'Покищо немає тестів',
+  createTest: 'Створити тест',
+  newTest: 'Новий тест',
+  description: 'Опис',
+  reallyWantDeleteTest: {
+    title: 'Ви дійсно бажаєте видалити тест',
+    description: 'Всі питання і відповіді теж буде видалено',
+    yes: 'Видалити тест',
+    no: 'Відмінити'
+  },
+  deleted: 'Видалено',
+  editTest: 'Редагувати тесту',
+  updateTest: 'Оновити тест',
+  error: 'Помилка',
+  questions: 'Питання',
+  question: 'Питання',
+  createQuestion: 'Створити питання',
+  createAndAddNew: 'Створити і додати',
+  emptyQuestions: 'Нема питань',
+  creatingQuestion: 'Створення питання',
+  updatingQuestion: 'Редагування питання',
+  updateQuestion: 'Оновити питання',
+  answers: 'Відповіді',
+  answer: 'Відповідь',
+  addAnswer: 'Додати відповідь',
+  deleteAnswer: 'Видалити відповідь',
+  correct: 'Правильний'
 }
