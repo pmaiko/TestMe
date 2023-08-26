@@ -54,14 +54,14 @@
       </v-btn>
       <v-btn
         :disabled="disabledNext"
-        color="pink-darken-1"
+        color="teal"
         variant="tonal"
         @click="onNext"
       >
         {{ $t('next') }}
       </v-btn>
       <v-btn
-        theme="primary"
+        color="pink-darken-1"
         variant="tonal"
         class="ml-auto"
       >

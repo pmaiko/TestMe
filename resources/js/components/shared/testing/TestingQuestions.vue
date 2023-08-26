@@ -15,7 +15,7 @@
       cols="auto"
     >
       <v-btn
-        :color="_get(question, 'id', '') === _get(modelValue, 'id', '') ? 'warning': _get(userAnswers[_get(question, 'id', '')], 'status', '')"
+        :color="_get(question, 'id', '') === _get(modelValue, 'id', '') ? 'white': _get(userAnswers[_get(question, 'id', '')], 'status', '') || 'grey'"
         density="compact"
         icon=""
         @click="onClickQuestion(question)"
