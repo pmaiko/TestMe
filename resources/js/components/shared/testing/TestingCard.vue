@@ -2,7 +2,7 @@
   <v-card
     class="pa-4"
   >
-    <v-card-title class="text-h5 font-weight-bold">
+    <v-card-title class="text-h6 font-weight-bold text-none text-wrap">
       {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }} <span
         v-if="String(_get(userAnswer, 'answerId', ''))"
         class="text-blue mdi mdi-check-circle-outline"
@@ -16,6 +16,9 @@
 
     <v-radio-group
       :modelValue="_get(userAnswer, 'answerId', '')"
+      :class="[
+        { 'pointer-events-none-': String(_get(userAnswer, 'answerId', '')) }
+      ]"
       class="mt-4 ml-8"
     >
       <div

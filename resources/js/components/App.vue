@@ -150,3 +150,8 @@
     })
   })
 </script>
+<style lang="scss">
+  .pointer-events-none {
+    pointer-events: none;
+  }
+</style>

@@ -34,11 +34,14 @@
           {{ $t('edit') }}
         </v-btn>
       </router-link>
-      <router-link :to="{name: 'testing', params: { test_id: props.id }}">
+      <router-link
+        :to="{name: 'testing', params: { test_id: props.id }}"
+        class="mr-auto"
+      >
         <v-btn
           color="success"
           variant="flat"
-          class="text-none mx-2 my-2 mr-auto"
+          class="text-none mx-2 my-2"
         >
           <template #prepend>
             <v-icon icon="mdi mdi-clock-start" />
