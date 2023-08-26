@@ -142,7 +142,7 @@
       }
 
       const role = store.getters['auth/role']
-      if (to.meta.admin && role !== 'admin') {
+      if (to.meta.admin && role !== 'ADMIN') {
         return {
           name: 'forbidden'
         }
