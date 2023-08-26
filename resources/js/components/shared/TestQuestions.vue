@@ -97,6 +97,7 @@
       showSnackbar($t('updatedQuestion'))
     } catch (error) {
       console.error(error)
+      showSnackbar($t('error'))
       errors.value = _get(error, 'response.data.errors') || {}
     } finally {
       loading.value = false

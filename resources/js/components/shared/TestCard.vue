@@ -34,16 +34,18 @@
           {{ $t('edit') }}
         </v-btn>
       </router-link>
-      <v-btn
-        color="success"
-        variant="flat"
-        class="text-none mx-2 my-2 mr-auto"
-      >
-        <template #prepend>
-          <v-icon icon="mdi mdi-clock-start" />
-        </template>
-        {{ $t('toStart') }}
-      </v-btn>
+      <router-link :to="{name: 'testing', params: { test_id: props.id }}">
+        <v-btn
+          color="success"
+          variant="flat"
+          class="text-none mx-2 my-2 mr-auto"
+        >
+          <template #prepend>
+            <v-icon icon="mdi mdi-clock-start" />
+          </template>
+          {{ $t('toStart') }}
+        </v-btn>
+      </router-link>
 
       <v-btn
         v-if="isAdmin"

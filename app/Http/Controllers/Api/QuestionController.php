@@ -140,8 +140,8 @@ class QuestionController extends Controller
                     }
                 } else {
                     $answerDB = Answer::create([
-                        "test_id" => $fields['question_id'],
-                        "question_id" => $fields["test_id"],
+                        "test_id" => $fields['test_id'],
+                        "question_id" => $fields["question_id"],
                         "answer" => $answer["answer"],
                         "description" => $answer["description"] ?? null,
                         "correct" => $answer["correct"] ?? false,
