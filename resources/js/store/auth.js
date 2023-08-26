@@ -54,8 +54,8 @@ export default {
 
       if (token) {
         try {
-          dispatch('setToken', { token })
-          dispatch('getUserCurrent')
+          await dispatch('setToken', { token })
+          await dispatch('getUserCurrent')
         } catch (error) {
           console.error(error)
         }

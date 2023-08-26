@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('question');
+            $table->string('question', 500);
             $table->string('description')->nullable();
             $table->unsignedBigInteger('test_id')->unsigned()->nullable();
             $table->foreign('test_id')->references('id')->on('tests')->onDelete('set null');

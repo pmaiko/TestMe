@@ -88,7 +88,7 @@
   import VLoader from '~/components/UI/VLoader'
 
   import * as api from '~/api'
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted, computed, inject } from 'vue'
   import { useRoute } from 'vue-router'
   import { useI18n } from 'vue3-i18n'
   const { t: $t } = useI18n()
@@ -117,19 +117,22 @@
     getTest()
   })
 
+  const showSnackbar = inject('showSnackbar', s => {})
   const loading = ref(false)
   const errors = ref({})
   const onSubmit = async (formData) => {
     try {
       loading.value = true
       errors.value = {}
-      await api.testUpdate({
+      const { data } = await api.testUpdate({
         id: route.params.test_id,
         ...formData
       })
+      showSnackbar(_get(data, 'message', ''))
     } catch (error) {
-      console.error(error)
+      showSnackbar($t('error'))
       errors.value = _get(error, 'response.data.errors') || {}
+      console.error(error)
     } finally {
       loading.value = false
     }

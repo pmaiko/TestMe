@@ -31,7 +31,7 @@ class TestController extends Controller
     public function create (Request $request) {
         $fields = $request->validate([
             "name" => "required|string",
-            "description" => "nullable|string"
+            "description" => "nullable|string|max:255"
         ]);
 
         $test = Test::create([
@@ -53,7 +53,7 @@ class TestController extends Controller
         $fields = $request->validate([
             "id" => "required",
             "name" => "string",
-            "description" => "nullable|string"
+            "description" => "nullable|string|max:255"
         ]);
 
         $test = Test::where("id", $fields['id'])->first();

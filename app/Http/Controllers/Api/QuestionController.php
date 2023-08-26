@@ -15,12 +15,12 @@ class QuestionController extends Controller
     public function create (Request $request) {
         $fields = $request->validate([
             "test_id" => "required|string",
-            "question" => "required|string",
-            "description" => "nullable|string",
+            "question" => "required|string|max:500",
+            "description" => "nullable|string|max:255",
 
             "answers" => "required|array",
-            "answers.*.answer" => "required|string",
-            "answers.*.description" => "nullable|string",
+            "answers.*.answer" => "required|string|max:255",
+            "answers.*.description" => "nullable|string|max:255",
             "answers.*.correct" => "boolean",
         ]);
 
@@ -68,14 +68,14 @@ class QuestionController extends Controller
             "test_id" => "required|string",
             "question_id" => "required|string",
 
-            "question" => "string",
-            "description" => "nullable|string",
+            "question" => "string|max:500",
+            "description" => "nullable|string|max:255",
 
             "answers" => "array|nullable",
             "answers.*.answer_id" => "string",
             "answers.*.delete" => "boolean",
-            "answers.*.answer" => "required_without:answers.*.answer_id|string",
-            "answers.*.description" => "nullable|string",
+            "answers.*.answer" => "required_without:answers.*.answer_id|string|max:255",
+            "answers.*.description" => "nullable|string|max:255",
             "answers.*.correct" => "boolean",
 //            "answers.*.answer" => "required_with:answers.*.answer_id|string", // Обязательное поле, если answer_id присутствует
         ]);
