@@ -1,4 +1,3 @@
-import './bootstrap'
 import { createI18n } from 'vue3-i18n'
 import router from './router'
 import store from '~/store'
@@ -16,6 +15,13 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+
+window._ = require('lodash')
+window.axios = require('axios')
+window.axios.defaults.baseURL = '/api/'
+
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+window.axios.defaults.headers.common['Accept-Language'] = 'uk'
 
 const vuetify = createVuetify({
   components,
@@ -37,19 +43,5 @@ const app = createApp(App)
   .use(i18n)
 
 app.config.globalProperties._get = _get
-
-await store.dispatch('auth/checkLogged')
-router.beforeEach(async (to, from) => {
-  const logged = store.getters['auth/logged']
-  if (!logged && to.name !== 'login') {
-    return {
-      name: 'login'
-    }
-  } if (logged && to.name === 'login') {
-    return {
-      name: 'tests'
-    }
-  }
-})
 
 app.mount('#app')

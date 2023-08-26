@@ -10,7 +10,7 @@
       <v-form @submit.prevent="onSubmit">
         <v-text-field
           v-model="formData['name']"
-          :label="$t('name')"
+          :label="$t('name') + '*'"
           :error-messages="errors['name']"
           variant="underlined"
           color="primary"

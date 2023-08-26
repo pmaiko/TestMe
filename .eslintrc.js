@@ -64,6 +64,8 @@ module.exports = {
     }
   ],
   globals: {
-    '_get': true
+    '_get': true,
+    '$t': true,
+    '$vuetify': true
   }
 }

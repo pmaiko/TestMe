@@ -1,11 +1,12 @@
 <template>
-  <div class="users-page">
+  <DefaultPage>
     <v-container fluid>
       users-page
     </v-container>
-  </div>
+  </DefaultPage>
 </template>
 <script setup>
+  import DefaultPage from '~/components/layout/DefaultPage'
 </script>
 <style lang="scss">
 

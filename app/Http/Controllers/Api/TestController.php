@@ -34,7 +34,11 @@ class TestController extends Controller
             "description" => "nullable|string"
         ]);
 
-        $test = Test::create($fields);
+        $test = Test::create([
+            "name" => $fields['name'],
+            "description" => $fields['description'],
+            "user_id" => auth()->user()->id
+        ]);
 
         $response = [
             'success' => true,
@@ -63,7 +67,9 @@ class TestController extends Controller
             ], 404);
         }
 
-        $updateData = [];
+        $updateData = [
+            "user_id" => auth()->user()->id
+        ];
 
         if (isset($fields['name'])) {
             $updateData['name'] = $fields['name'];

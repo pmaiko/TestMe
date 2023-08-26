@@ -29,14 +29,16 @@ class QuestionController extends Controller
             $question = Question::create([
                 "test_id" => $fields['test_id'],
                 "question" => $fields['question'],
-                "description" => $fields['description']
+                "description" => $fields['description'],
+                "user_id" => auth()->user()->id
             ]);
 
             $answers = [];
             foreach ($fields['answers'] as $answer) {
                 $answers[] = Answer::create(array_merge($answer, [
                     "test_id" => $fields["test_id"],
-                    "question_id" => $question->id
+                    "question_id" => $question->id,
+                    "user_id" => auth()->user()->id
                 ]));
             }
             DB::commit();
@@ -71,6 +73,7 @@ class QuestionController extends Controller
 
             "answers" => "array|nullable",
             "answers.*.answer_id" => "string",
+            "answers.*.delete" => "boolean",
             "answers.*.answer" => "required_without:answers.*.answer_id|string",
             "answers.*.description" => "nullable|string",
             "answers.*.correct" => "boolean",
@@ -103,33 +106,38 @@ class QuestionController extends Controller
         if ($fields['answers']) {
             foreach ($fields['answers'] as $answer) {
                 if (isset($answer['answer_id'])) {
-                    $updateAnswerData = [];
-                    $answerDB = Answer::where("id", $answer['answer_id'])->
+                    if (isset($answer['delete']) && $answer['delete'] === true) {
+                        Answer::where("id", $answer['answer_id'])->
                         where("question_id", $fields['question_id'])->
-                        where("test_id", $fields["test_id"])->
-                        first();
+                        where("test_id", $fields["test_id"])->delete();
+                    } else {
+                        $updateAnswerData = [];
+                        $answerDB = Answer::where("id", $answer['answer_id'])->
+                            where("question_id", $fields['question_id'])->
+                            where("test_id", $fields["test_id"])->first();
 
-                    if (!$answerDB) {
-                        $validator = Validator::make([], []);
-                        $validator->errors()->add('answer_id', __('validation.custom.answer_not_found'));
+                        if (!$answerDB) {
+                            $validator = Validator::make([], []);
+                            $validator->errors()->add('answer_id', __('validation.custom.answer_not_found'));
 
-                        return response([
-                            'errors' => $validator->errors()
-                        ], 404);
-                    }
+                            return response([
+                                'errors' => $validator->errors()
+                            ], 404);
+                        }
 
-                    if (isset($answer['answer'])) {
-                        $updateAnswerData['answer'] = $answer['answer'];
-                    }
-                    if (isset($answer['description']) || $answer['description'] === null) {
-                        $updateAnswerData['description'] = $answer['description'];
-                    }
-                    if (isset($answer['correct'])) {
-                        $updateAnswerData['correct'] = $answer['correct'];
-                    }
+                        if (isset($answer['answer'])) {
+                            $updateAnswerData['answer'] = $answer['answer'];
+                        }
+                        if (isset($answer['description']) || $answer['description'] === null) {
+                            $updateAnswerData['description'] = $answer['description'];
+                        }
+                        if (isset($answer['correct'])) {
+                            $updateAnswerData['correct'] = $answer['correct'];
+                        }
 
-                    $answerDB->update($updateAnswerData);
-                    $answers[] = $answerDB;
+                        $answerDB->update($updateAnswerData);
+                        $answers[] = $answerDB;
+                    }
                 } else {
                     $answerDB = Answer::create([
                         "test_id" => $fields['question_id'],
@@ -164,7 +172,7 @@ class QuestionController extends Controller
         ]);
 
         $question = Question::where("id", $fields['question_id'])->where("test_id", $fields["test_id"])->first();
-        $answer = Answer::where('question_id', $fields["question_id"])->where('test_id', $fields["test_id"]);
+        $answers = Answer::where('question_id', $fields["question_id"])->where('test_id', $fields["test_id"]);
 
         if (!$question) {
             $validator = Validator::make([], []);
@@ -175,7 +183,7 @@ class QuestionController extends Controller
             ], 404);
         }
 
-        if (!$answer) {
+        if (!$answers) {
             $validator = Validator::make([], []);
             $validator->errors()->add('question_id', __('validation.custom.answer_not_found'));
 
@@ -184,8 +192,8 @@ class QuestionController extends Controller
             ], 404);
         }
 
+        $answers->delete();
         $question->delete();
-        $answer->delete();
 
         $response = [
             'success' => true,

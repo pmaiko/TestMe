@@ -1,5 +1,24 @@
 <template>
   <v-app>
+    <v-navigation-drawer
+      v-if="logged"
+      v-model="drawer"
+      location="left"
+      :temporary="$vuetify.display.smAndDown"
+      theme="red"
+    >
+      <v-list nav>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :link="true"
+          :to="item.path"
+          :title="item.label"
+          :value="item.label"
+          :prepend-icon="item.icon"
+        />
+      </v-list>
+    </v-navigation-drawer>
     <v-app-bar
       color="red"
       scroll-behavior="elevate fade-image inverted"
@@ -9,23 +28,12 @@
         v-if="logged"
         #prepend
       >
-        <v-app-bar-nav-icon />
-        <v-menu activator="parent">
-          <v-list>
-            <router-link
-              v-for="(item, index) in items"
-              :key="index"
-              :value="index"
-              :to="{ name: item.name }"
-              class="text-body-1 text-black text-decoration-none"
-            >
-              <v-list-item>
-                <v-list-item-title>{{ item.label }}</v-list-item-title>
-              </v-list-item>
-            </router-link>
-          </v-list>
-        </v-menu>
+        <v-app-bar-nav-icon
+          @click.stop="drawer = !drawer"
+        />
+        <!--image="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"-->
       </template>
+
       <v-app-bar-title>
         TestMe <span
           v-if="logged"
@@ -47,13 +55,13 @@
       </button>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="mb-8">
       <router-view class="page-content" />
     </v-main>
 
     <v-snackbar
       v-model="snackbar"
-      :timeout="2000"
+      :timeout="4000"
     >
       {{ snackbarText }}
 
@@ -74,39 +82,71 @@
   // import { useRouter } from 'vue-router'
   import { useI18n } from 'vue3-i18n'
   import { useAuth } from '~/hooks/useAuth'
+  import { useRouter } from 'vue-router'
+  import { useStore } from 'vuex'
   const { logged, user, logout } = useAuth()
+
   // const router = useRouter()
   const { t: $t } = useI18n()
+  const router = useRouter()
+  const store = useStore()
 
   const items = ref([
     {
       label: $t('menu.tests'),
       path: '/cabinet/tests',
-      name: 'tests'
+      name: 'tests',
+      icon: 'mdi-ab-testing'
     },
     {
       label: $t('menu.results'),
       path: '/cabinet/results',
-      name: 'results'
+      name: 'results',
+      icon: 'mdi-chart-line'
     },
     {
       label: $t('menu.users'),
       path: '/cabinet/users',
-      name: 'users'
+      name: 'users',
+      icon: 'mdi-account-multiple-outline'
     },
     {
       label: $t('menu.settings'),
       path: '/cabinet/settings',
-      name: 'settings'
+      name: 'settings',
+      icon: 'mdi-cog'
     }
   ])
 
   const snackbar = ref(false)
   const snackbarText = ref(false)
+  const drawer = ref(false)
 
   const showSnackbar = (text) => {
     snackbar.value = true
     snackbarText.value = text
   }
   provide('showSnackbar', showSnackbar)
+
+  store.dispatch('auth/checkLogged').then(() => {
+    router.beforeEach(async (to, from) => {
+      const logged = store.getters['auth/logged']
+      if (!logged && to.name !== 'login') {
+        return {
+          name: 'login'
+        }
+      } if (logged && to.name === 'login') {
+        return {
+          name: 'tests'
+        }
+      }
+
+      const role = store.getters['auth/role']
+      if (to.meta.admin && role !== 'admin') {
+        return {
+          name: 'forbidden'
+        }
+      }
+    })
+  })
 </script>

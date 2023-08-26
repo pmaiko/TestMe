@@ -1,4 +1,5 @@
 export default {
+  newUserDialog: 'Поздоровляю!!! Ви зареєстровані!!! Тепер ви можете увійти в кабінет!',
   enterToSystem: 'Вхід в систему',
   enter: 'Вхід',
   exit: 'Вихід',
@@ -11,6 +12,7 @@ export default {
   close: 'Закрити',
   toRegister: 'Зареєструватися',
   menu: {
+    cabinet: 'Кабінет',
     tests: 'Тести',
     results: 'Результати',
     users: 'Користувачі',
@@ -26,12 +28,12 @@ export default {
   description: 'Опис',
   reallyWantDeleteTest: {
     title: 'Ви дійсно бажаєте видалити тест',
-    description: 'Всі питання і відповіді теж буде видалено',
+    description: 'Всі питання і відповіді теж буде видалено!',
     yes: 'Видалити тест',
     no: 'Відмінити'
   },
   deleted: 'Видалено',
-  editTest: 'Редагувати тесту',
+  editTest: 'Редагувати тест',
   updateTest: 'Оновити тест',
   error: 'Помилка',
   questions: 'Питання',
@@ -40,11 +42,21 @@ export default {
   createAndAddNew: 'Створити і додати',
   emptyQuestions: 'Нема питань',
   creatingQuestion: 'Створення питання',
+  createdQuestion: 'Питання створено',
+  updatedQuestion: 'Питання оновлено',
+  deletedQuestion: 'Питання видалено',
   updatingQuestion: 'Редагування питання',
   updateQuestion: 'Оновити питання',
   answers: 'Відповіді',
   answer: 'Відповідь',
   addAnswer: 'Додати відповідь',
   deleteAnswer: 'Видалити відповідь',
-  correct: 'Правильний'
+  correct: 'Правильний',
+  emptyAnswers: 'Нема відповідей',
+  reallyWantDeleteQuestion: {
+    title: 'Ви дійсно бажаєте видалити питання',
+    description: 'Всі відповіді теж буде видалено!',
+    yes: 'Видалити питання',
+    no: 'Відмінити'
+  }
 }

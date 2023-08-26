@@ -30,6 +30,14 @@ export const login = async (data) => {
   })
 }
 
+export const register = async (data) => {
+  return window.axios({
+    url: '/register',
+    method: 'POST',
+    data: removeEmptyFields(data)
+  })
+}
+
 export const user = async () => {
   return window.axios({
     url: '/user',

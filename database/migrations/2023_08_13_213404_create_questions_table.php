@@ -19,6 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->string('description')->nullable();
             $table->unsignedBigInteger('test_id')->unsigned()->nullable();
             $table->foreign('test_id')->references('id')->on('tests')->onDelete('set null');
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

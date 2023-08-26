@@ -26,7 +26,7 @@
         <v-btn
           color="primary"
           variant="flat"
-          class="text-capitalize mx-2 my-2"
+          class="text-none mx-2 my-2"
         >
           <template #prepend>
             <v-icon icon="mdi-pencil" />
@@ -37,7 +37,7 @@
       <v-btn
         color="success"
         variant="flat"
-        class="text-capitalize mx-2 my-2 mr-auto"
+        class="text-none mx-2 my-2 mr-auto"
       >
         <template #prepend>
           <v-icon icon="mdi mdi-clock-start" />
@@ -49,7 +49,7 @@
         v-if="isAdmin"
         color="red"
         variant="flat"
-        class="text-capitalize mx-2 my-2"
+        class="text-none mx-2 my-2"
         @click="onOpenDialog"
       >
         <template #prepend>

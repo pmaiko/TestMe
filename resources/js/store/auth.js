@@ -30,36 +30,50 @@ export default {
       window.axios.defaults.headers.common.Authorization = `Bearer ${token}`
     },
 
-    setUser ({ commit }, { user }) {
-      commit('SET_USER', user)
-    },
-
-    async logout ({ commit }) {
-      try {
-        api.logout()
-      } catch (error) {
-        console.error(error)
-      }
+    removeToken ({ commit }) {
       commit('SET_TOKEN', null)
       localStorage.removeItem('token')
       window.axios.defaults.headers.common.Authorization = ''
     },
 
-    checkLogged ({ dispatch }) {
+    setUser ({ commit }, { user }) {
+      commit('SET_USER', user)
+    },
+
+    async logout ({ dispatch }) {
+      try {
+        api.logout()
+      } catch (error) {
+        console.error(error)
+      }
+      dispatch('removeToken')
+    },
+
+    async checkLogged ({ dispatch }) {
       const token = localStorage.getItem('token')
 
       if (token) {
-        dispatch('setToken', { token })
-        dispatch('getUserCurrent')
+        try {
+          dispatch('setToken', { token })
+          dispatch('getUserCurrent')
+        } catch (error) {
+          console.error(error)
+        }
       }
     },
 
     async getUserCurrent ({ dispatch }) {
       try {
         const { data } = await api.user()
-        dispatch('setUser', { user: data })
+        await dispatch('setUser', { user: data })
+        return Promise.resolve(data)
       } catch (error) {
-        console.error(error)
+        localStorage.removeItem('token')
+        await dispatch('removeToken')
+        window.router.push({
+          name: 'login'
+        })
+        return Promise.reject(error)
       }
     }
   }

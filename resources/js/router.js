@@ -11,6 +11,8 @@ import SettingsPage from '~/components/pages/cabinet/SettingsPage'
 import TestCreatePage from '~/components/pages/cabinet/test/TestCreatePage'
 import TestUpdatePage from '~/components/pages/cabinet/test/TestUpdatePage'
 import QuestionCreate from '~/components/pages/cabinet/test/QuestionCreate'
+import ErrorForbidden from '~/components/ErrorForbidden'
+import ErrorNotFound from '~/components/ErrorNotFound'
 
 const routes = [
   {
@@ -34,7 +36,8 @@ const routes = [
       {
         path: 'users',
         name: 'users',
-        component: ResultsPage
+        component: ResultsPage,
+        meta: { admin: true }
       },
       {
         path: 'settings',
@@ -44,30 +47,49 @@ const routes = [
     ]
   },
   {
-    path: '/test',
+    path: '/cabinet/test',
     children: [
       {
         path: 'create',
         name: 'test-create',
-        component: TestCreatePage
+        component: TestCreatePage,
+        meta: { admin: true }
       },
       {
         path: 'update/:test_id',
         name: 'test-update',
-        component: TestUpdatePage
+        component: TestUpdatePage,
+        meta: { admin: true }
       },
       {
         path: 'update/:test_id/question/create',
         name: 'test-update-question-create',
-        component: QuestionCreate
+        component: QuestionCreate,
+        meta: { admin: true }
       }
     ]
+  },
+  {
+    path: '/forbidden',
+    name: 'forbidden',
+    component: ErrorForbidden
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'error',
+    component: ErrorNotFound
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    return { left: 0, top: 0 }
+  },
+  linkActiveClass: 'active'
 })
+
+window.router = router
 
 export default router

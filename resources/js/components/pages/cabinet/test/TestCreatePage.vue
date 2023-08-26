@@ -1,23 +1,30 @@
 <template>
-  <v-container
-    fluid
-    class="tests-page h-100"
+  <DefaultPage
+    :breadcrumbs="breadcrumbs"
   >
-    <TestForm
-      :title="$t('newTest')"
-      :buttonText="$t('createTest')"
-      :errors="errors"
-      :loading="loading"
-      @submit="onSubmit"
-    />
-  </v-container>
+    <v-container
+      fluid
+      class="tests-page h-100"
+    >
+      <TestForm
+        :title="$t('newTest')"
+        :buttonText="$t('createTest')"
+        :errors="errors"
+        :loading="loading"
+        @submit="onSubmit"
+      />
+    </v-container>
+  </DefaultPage>
 </template>
 <script setup>
-  import * as api from '~/api'
+  import DefaultPage from '~/components/layout/DefaultPage'
   import TestForm from '~/components/shared/TestForm'
 
-  import { ref } from 'vue'
+  import * as api from '~/api'
+  import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import { useI18n } from 'vue3-i18n'
+  const { t: $t } = useI18n()
 
   const router = useRouter()
   const errors = ref({})
@@ -26,6 +33,7 @@
   const onSubmit = async (formData) => {
     try {
       loading.value = true
+      errors.value = {}
       await api.testCreate(formData)
       await router.push({
         name: 'tests'
@@ -37,4 +45,22 @@
       loading.value = false
     }
   }
+
+  const breadcrumbs = computed(() => [
+    {
+      title: $t('menu.cabinet'),
+      disabled: true,
+      to: '/cabinet'
+    },
+    {
+      title: $t('menu.tests'),
+      disabled: false,
+      to: { name: 'tests' }
+    },
+    {
+      title: $t('newTest'),
+      disabled: true,
+      to: { name: 'test-create' }
+    }
+  ])
 </script>

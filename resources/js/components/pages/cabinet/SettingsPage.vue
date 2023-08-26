@@ -1,12 +1,14 @@
 <template>
-  <div class="settings-page">
+  <DefaultPage>
     <v-container fluid>
       settings-page
     </v-container>
-  </div>
+  </DefaultPage>
 </template>
 <script setup>
+  import DefaultPage from '~/components/layout/DefaultPage'
 </script>
 <style lang="scss">
 
 </style>
+
