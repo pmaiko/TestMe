@@ -15,7 +15,7 @@ class QuestionController extends Controller
     public function create (Request $request) {
         $fields = $request->validate([
             "test_id" => "required|string",
-            "question" => "required|string|max:500",
+            "question" => "required|string|max:3072",
             "description" => "nullable|string|max:255",
 
             "answers" => "required|array",
@@ -68,7 +68,7 @@ class QuestionController extends Controller
             "test_id" => "required|string",
             "question_id" => "required|string",
 
-            "question" => "string|max:500",
+            "question" => "string|max:3072",
             "description" => "nullable|string|max:255",
 
             "answers" => "array|nullable",
