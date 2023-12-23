@@ -82,7 +82,7 @@
   const getTest = async () => {
     try {
       getTestLoading.value = true
-      const { data } = await api.test(route.params.test_id)
+      const { data } = await api.testing(route.params.test_id)
       testData.value = data
       activeQuestion.value = _get(data, 'questions.0', '') || null
     } catch (error) {

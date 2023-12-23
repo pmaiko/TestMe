@@ -3,29 +3,82 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AnswerCollection;
+use App\Models\Answer;
+use App\Models\Question;
+use App\Models\TestsResult;
+use App\Models\TestsResultsAnswers;
 use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Ramsey\Collection\Collection;
 
 class TestController extends Controller
 {
-    public function getAll () {
+    public function index () {
         return Test::all();
     }
 
     public function test (Request $request) {
-        $test = Test::where('id', $request->testId)->first();
-        if (!$test) {
-            abort(404);
-        }
-        return response()->json(array_merge(
-            $test->toArray(),
+      $test = Test::query()->where('id', $request->testId)->first();
+      if (!$test) {
+          abort(404);
+      }
 
-            ["questions" => $test->questions->map(function ($question) {
-                $question['answers'] = $question->answers;
-                return $question;
-            })]
-        ));
+      $sortedQuestions = $test->questions->sortByDesc('created_at')->values();
+
+      return response()->json(array_merge(
+          $test->toArray(),
+
+          ["questions" => $sortedQuestions->map(function ($question) {
+              $question['answers'] = $question->answers;
+              return $question;
+          })]
+      ));
+    }
+
+    public function testing (Request $request) {
+      // $test = Test::where('id', $request->testId)->with(['questionsRandom', 'questionsRandom.answers'])->first();
+      $test = Test::query()
+        ->where('id', $request->testId)
+        ->with(['questions' => function ($query) {
+          $query
+            ->inRandomOrder()
+            ->limit(150);
+        }, 'questions.answers' => function  ($query) {
+          $query
+          ->inRandomOrder(1);
+        }])
+        ->first();
+
+      if (!$test) {
+        abort(404);
+      }
+
+      $attempt = Str::uuid()->toString();
+
+      $test->questions->each(function (Question $question) use ($attempt) {
+        $user_id = $question->user_id;
+        $test_id = $question->test_id;
+        $question_id = $question->id;
+
+        $testsResult = TestsResult::query()->create([
+          'attempt' => $attempt,
+          'user_id' => $user_id,
+          'test_id' => $test_id,
+          'question_id' => $question_id
+        ]);
+
+        $question->answers->each(function (Answer $answer) use ($testsResult) {
+          TestsResultsAnswers::query()->create([
+            'answer_id' => $answer->id,
+            'tests_results_id' => $testsResult->id
+          ]);
+        });
+      });
+
+      return response()->json($test);
     }
 
     public function create (Request $request) {

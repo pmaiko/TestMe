@@ -11,8 +11,9 @@ class Answer extends Model
 
     protected $table = "answers";
     protected $guarded = [];
-
     protected $casts = [
         'correct' => 'boolean',
     ];
+
+    //DTO
 }

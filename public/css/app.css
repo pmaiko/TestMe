@@ -1,3 +1,9 @@
 
-.v-expansion-panel-title__icon{margin-left:0!important}
-.pointer-events-none{pointer-events:none}
+.v-expansion-panel-title__icon {
+  margin-left: 0 !important;
+}
+.pointer-events-none {
+  pointer-events: none;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3NzL2FwcC5jc3MiLCJtYXBwaW5ncyI6IjtBQUdJO0VBQ0U7QUFGTixDO0FDQUU7RUFDRTtBQURKLEMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9yZXNvdXJjZXMvanMvY29tcG9uZW50cy9zaGFyZWQvVGVzdFF1ZXN0aW9ucy52dWUiLCJ3ZWJwYWNrOi8vLy4vcmVzb3VyY2VzL2pzL2NvbXBvbmVudHMvQXBwLnZ1ZSJdLCJzb3VyY2VzQ29udGVudCI6WyJcblxuICAudi1leHBhbnNpb24tcGFuZWwtdGl0bGUge1xuICAgICZfX2ljb24ge1xuICAgICAgbWFyZ2luLWxlZnQ6IDAgIWltcG9ydGFudDtcbiAgICB9XG4gIH1cbiIsIlxuXG4gIC5wb2ludGVyLWV2ZW50cy1ub25lIHtcbiAgICBwb2ludGVyLWV2ZW50czogbm9uZTtcbiAgfVxuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9*/

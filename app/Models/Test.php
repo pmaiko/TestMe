@@ -13,6 +13,7 @@ class Test extends Model
     protected $guarded = [];
 
     public function questions () {
-        return $this->hasMany(Question::class, 'test_id')->orderBy('created_at', 'desc');
+        return $this->hasMany(Question::class, 'test_id');
+//        return $this->hasMany(Question::class, 'test_id')->orderBy('created_at', 'desc');
     }
 }

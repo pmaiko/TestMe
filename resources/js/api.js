@@ -93,6 +93,15 @@ export const test = async (test_id) => {
   })
 }
 
+// eslint-disable-next-line camelcase
+export const testing = async (test_id) => {
+  return window.axios({
+    // eslint-disable-next-line camelcase
+    url: `/test/${test_id}/testing`,
+    method: 'GET'
+  })
+}
+
 export const questionCreate = async (data) => {
   return window.axios({
     url: '/question',

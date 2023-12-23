@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FavoriteController extends Controller
 {
-    public function getAll () {
+    public function index () {
         $favorites = Favorite::where("user_id", auth()->user()->id)->get();
 
         $questions = [];

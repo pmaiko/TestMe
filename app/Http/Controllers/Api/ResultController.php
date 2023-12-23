@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ResultController extends Controller
 {
-    public function getAll () {
+    public function index () {
 //        $results = Result::where("user_id", auth()->user()->id)->get();
 //        'results' => $results->map(function ($result) {
 //            $result['test'] = $result->test;
