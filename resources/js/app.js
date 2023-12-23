@@ -43,5 +43,6 @@ const app = createApp(App)
   .use(i18n)
 
 app.config.globalProperties._get = _get
+app.config.globalProperties.useFormattedDate = useFormattedDate
 
 app.mount('#app')

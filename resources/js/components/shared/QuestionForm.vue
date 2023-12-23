@@ -150,7 +150,6 @@
 </template>
 <script setup>
   import VTitle from '~/components/UI/VTitle'
-  import { computed, reactive } from 'vue'
   import VEmpty from '~/components/UI/VEmpty'
 
   const props = defineProps({

@@ -101,24 +101,16 @@
   </v-card>
 </template>
 <script setup>
-  import * as api from '~/api'
-  import { useFormattedDate } from '~/hooks/useDate'
-  import { useAuth } from '~/hooks/useAuth'
-  import { ref, inject } from 'vue'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
-
-  const { isAdmin } = useAuth()
-
   const props = defineProps({
     id: [String, Number],
     name: String,
     description: String,
-    // eslint-disable-next-line vue/prop-name-casing
     created_at: String,
-    // eslint-disable-next-line vue/prop-name-casing
     updated_at: String
   })
+
+  const { isAdmin } = useAuth()
+
   const showSnackbar = inject('showSnackbar', s => {})
   const emit = defineEmits(['update'])
 
@@ -134,7 +126,7 @@
   const onDeleteTest = async () => {
     try {
       loading.value = true
-      await api.testDelete({
+      await useApi().testDelete({
         id: props.id
       })
       emit('update')

@@ -1,5 +1,7 @@
 <template>
-  <DefaultPage>
+  <DefaultPage
+    :breadcrumbs="breadcrumbs"
+  >
     <v-container fluid>
       results-page
     </v-container>
@@ -7,8 +9,39 @@
 </template>
 <script setup>
   import DefaultPage from '~/components/layout/DefaultPage'
+
+  const tests = ref([])
+  const loading = ref(true)
+
+  const getTests = async () => {
+    try {
+      loading.value = true
+      const { data } = await useApi().getTestsWithResults()
+      tests.value = data
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onMounted(() => {
+    getTests()
+  })
+
+  const breadcrumbs = computed(() => [
+    {
+      title: $t('menu.cabinet'),
+      disabled: true,
+      href: '/cabinet'
+    },
+    {
+      title: $t('menu.results'),
+      disabled: true,
+      href: '/cabinet/test'
+    }
+  ])
 </script>
 <style lang="scss">
-
 </style>
 

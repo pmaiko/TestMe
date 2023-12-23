@@ -23,13 +23,6 @@
   import DefaultPage from '~/components/layout/DefaultPage'
   import QuestionForm from '~/components/shared/QuestionForm'
 
-  import * as api from '~/api'
-
-  import { inject, ref, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
-
   const router = useRouter()
   const route = useRoute()
 
@@ -41,7 +34,7 @@
     try {
       loading.value = true
       errors.value = {}
-      await api.questionCreate({
+      await useApi().questionCreate({
         test_id: route.params.test_id,
         ...formData
       })

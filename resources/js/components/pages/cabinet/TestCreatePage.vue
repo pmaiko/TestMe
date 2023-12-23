@@ -20,12 +20,6 @@
   import DefaultPage from '~/components/layout/DefaultPage'
   import TestForm from '~/components/shared/TestForm'
 
-  import * as api from '~/api'
-  import { computed, ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
-
   const router = useRouter()
   const errors = ref({})
   const loading = ref(false)
@@ -34,7 +28,7 @@
     try {
       loading.value = true
       errors.value = {}
-      await api.testCreate(formData)
+      await useApi().testCreate(formData)
       await router.push({
         name: 'tests'
       })

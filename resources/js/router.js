@@ -32,12 +32,12 @@ const routes = [
       {
         path: 'results',
         name: 'results',
-        component: UsersPage
+        component: ResultsPage
       },
       {
         path: 'users',
         name: 'users',
-        component: ResultsPage,
+        component: UsersPage,
         meta: { admin: true }
       },
       {

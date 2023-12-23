@@ -109,10 +109,6 @@
   </v-dialog>
 </template>
 <script setup>
-  import * as api from '~/api'
-
-  import { ref, reactive } from 'vue'
-
   const dialog = ref(false)
   const successDialog = ref(false)
 
@@ -129,7 +125,7 @@
     try {
       loading.value = true
       errors.value = {}
-      await api.register(formData)
+      await useApi().register(formData)
       successDialog.value = true
       dialog.value = false
     } catch (error) {

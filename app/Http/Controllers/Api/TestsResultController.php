@@ -7,8 +7,8 @@ use App\Models\TestsResult;
 
 class TestsResultController extends Controller
 {
-  function index () {
-    $results = TestsResult::query()->where('user_id', auth()->user()->id);
+  function getTestsWithResults () {
+    $results = TestsResult::query()->where('user_id', auth()->user()->id)->get();
     dd($results);
   }
 }

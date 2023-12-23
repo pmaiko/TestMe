@@ -126,3 +126,11 @@ export const questionDelete = async (data) => {
   })
 }
 
+export const getTestsWithResults = async (data) => {
+  return window.axios({
+    url: '/tests-with-results',
+    method: 'GET',
+    data: removeEmptyFields(data)
+  })
+}
+

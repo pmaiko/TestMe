@@ -52,11 +52,6 @@
   import DefaultPage from '~/components/layout/DefaultPage'
   import TheModalRegister from '~/components/layout/TheModalRegister'
 
-  import * as api from '~/api'
-
-  import { ref, reactive } from 'vue'
-  import { useAuth } from '~/hooks/useAuth'
-
   const { setToken, setUser, redirectToCabinet } = useAuth()
 
   const formData = reactive({
@@ -71,7 +66,7 @@
     try {
       loading.value = true
       errors.value = {}
-      const { data } = await api.login(formData)
+      const { data } = await useApi().login(formData)
 
       setToken(data.token)
       setUser(data.user)

@@ -61,12 +61,6 @@
   import VEmpty from '~/components/UI/VEmpty'
   import TestCard from '~/components/shared/TestCard'
 
-  import * as api from '~/api'
-  import { ref, onMounted, computed } from 'vue'
-  import { useAuth } from '~/hooks/useAuth'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
-
   const { isAdmin } = useAuth()
 
   const tests = ref([])
@@ -75,7 +69,7 @@
   const getTests = async () => {
     try {
       loading.value = true
-      const { data } = await api.tests()
+      const { data } = await useApi().tests()
       tests.value = data
     } catch (error) {
       console.error(error)

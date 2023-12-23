@@ -53,5 +53,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/results', [ResultController::class, 'index']);
   Route::post('/result', [ResultController::class, 'create']);
 
-  Route::get('/test-results', [TestsResultController::class, 'index']);
+  Route::get('/tests-with-results', [TestsResultController::class, 'getTestsWithResults']);
 });

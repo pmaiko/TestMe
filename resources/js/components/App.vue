@@ -78,16 +78,7 @@
   </v-app>
 </template>
 <script setup>
-  import { ref, provide } from 'vue'
-  // import { useRouter } from 'vue-router'
-  import { useI18n } from 'vue3-i18n'
-  import { useAuth } from '~/hooks/useAuth'
-  import { useRouter } from 'vue-router'
-  import { useStore } from 'vuex'
   const { logged, user, logout } = useAuth()
-
-  // const router = useRouter()
-  const { t: $t } = useI18n()
   const router = useRouter()
   const store = useStore()
 

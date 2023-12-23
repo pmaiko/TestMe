@@ -1,7 +1,7 @@
 <template>
   <v-breadcrumbs
-    v-if="_get(props, 'breadcrumbs.length', '')"
-    :items="props.breadcrumbs"
+    v-if="_get(breadcrumbs, 'length', '')"
+    :items="breadcrumbs"
   >
     <template #divider>
       <v-icon icon="mdi-chevron-right" />
@@ -10,7 +10,7 @@
   <slot />
 </template>
 <script setup>
-  const props = defineProps({
+  defineProps({
     breadcrumbs: Array
   })
   // import { ref } from 'vue'

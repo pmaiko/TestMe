@@ -68,12 +68,6 @@
 <script setup>
   import QuestionForm from '~/components/shared/QuestionForm'
 
-  import * as api from '~/api'
-  import { inject, ref } from 'vue'
-  import { useI18n } from 'vue3-i18n'
-  import { useRoute } from 'vue-router'
-
-  const { t: $t } = useI18n()
   const route = useRoute()
   const showSnackbar = inject('showSnackbar', s => {})
 
@@ -89,7 +83,7 @@
     try {
       loading.value = true
       errors.value = {}
-      await api.questionUpdate({
+      await useApi().questionUpdate({
         test_id: route.params.test_id,
         ...formData
       })
@@ -135,7 +129,7 @@
     try {
       loading.value = true
 
-      await api.questionDelete({
+      await useApi().questionDelete({
         test_id: route.params.test_id,
         question_id: String(dialogQuestion.value.id)
       })

@@ -87,12 +87,6 @@
   import VEmpty from '~/components/UI/VEmpty'
   import VLoader from '~/components/UI/VLoader'
 
-  import * as api from '~/api'
-  import { ref, onMounted, computed, inject } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
-
   const route = useRoute()
 
   const fieldsData = ref(null)
@@ -101,7 +95,7 @@
   const getTest = async () => {
     try {
       getTestLoading.value = true
-      const { data } = await api.test(route.params.test_id)
+      const { data } = await useApi().test(route.params.test_id)
       fieldsData.value = {
         name: data.name,
         description: data.description
@@ -124,7 +118,7 @@
     try {
       loading.value = true
       errors.value = {}
-      const { data } = await api.testUpdate({
+      const { data } = await useApi().testUpdate({
         id: route.params.test_id,
         ...formData
       })

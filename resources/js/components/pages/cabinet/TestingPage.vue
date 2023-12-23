@@ -39,11 +39,6 @@
   import TestingCard from '~/components/shared/testing/TestingCard'
   import TestingQuestions from '~/components/shared/testing/TestingQuestions'
 
-  import * as api from '~/api'
-  import { ref, onMounted, computed } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { useI18n } from 'vue3-i18n'
-  const { t: $t } = useI18n()
   const route = useRoute()
 
   const activeQuestion = ref(null)
@@ -82,7 +77,7 @@
   const getTest = async () => {
     try {
       getTestLoading.value = true
-      const { data } = await api.testing(route.params.test_id)
+      const { data } = await useApi().testing(route.params.test_id)
       testData.value = data
       activeQuestion.value = _get(data, 'questions.0', '') || null
     } catch (error) {

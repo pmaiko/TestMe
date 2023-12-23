@@ -43,7 +43,6 @@
 </template>
 <script setup>
   import VTitle from '~/components/UI/VTitle'
-  import { reactive } from 'vue'
 
   const props = defineProps({
     title: String,

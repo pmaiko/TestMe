@@ -15,13 +15,15 @@ module.exports = {
     // https://www.npmjs.com/package/eslint-plugin-promise
     // https://www.npmjs.com/package/babel-eslint
     'plugin:vue/recommended',
-    'standard'
+    'standard',
+    './.eslintrc-auto-import.json'
   ],
   plugins: [
     'vue'
   ],
   rules: {
     // js
+    'vue/prop-name-casing': 0,
     'indent': ['error', 2],
     'no-console': 0,
     'prefer-const': ['error', { 'destructuring': 'all' }],
