@@ -25,8 +25,21 @@
     }
   }
 
+  const getTestResults = async () => {
+    try {
+      loading.value = true
+      const { data } = await useApi().getTestResults(2)
+      tests.value = data
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
+  }
+
   onMounted(() => {
     getTests()
+    getTestResults()
   })
 
   const breadcrumbs = computed(() => [

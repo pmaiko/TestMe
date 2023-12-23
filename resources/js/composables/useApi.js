@@ -134,6 +134,13 @@ class Api {
       data: removeEmptyFields(data)
     })
   }
+
+  getTestResults = async (testId) => {
+    return window.axios({
+      url: `/test-results/${testId}`,
+      method: 'GET'
+    })
+  }
 }
 
 
