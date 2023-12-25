@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ResponseResource;
 use App\Models\Test;
 use App\Models\TestsResult;
 use Illuminate\Http\Request;
@@ -29,7 +28,7 @@ class TestsResultController extends Controller
         $tests->push($test);
       });
 
-      return response()->json(new ResponseResource($tests));
+      return response()->json($tests);
     } else {
       abort(404);
     }
@@ -47,6 +46,6 @@ class TestsResultController extends Controller
       ->distinct()
       ->pluck('attempt');
 
-    return response()->json(new ResponseResource($attempts));
+    return response()->json($attempts);
   }
 }

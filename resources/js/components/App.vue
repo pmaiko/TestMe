@@ -119,26 +119,26 @@
   }
   provide('showSnackbar', showSnackbar)
 
-  store.dispatch('auth/checkLogged').then(() => {
-    router.beforeEach(async (to, from) => {
-      const logged = store.getters['auth/logged']
-      if (!logged && to.name !== 'login') {
-        return {
-          name: 'login'
-        }
-      } if (logged && to.name === 'login') {
-        return {
-          name: 'tests'
-        }
-      }
+  router.beforeEach(async (to, from) => {
+    await store.dispatch('auth/checkLogged')
 
-      const role = store.getters['auth/role']
-      if (to.meta.admin && role !== 'ADMIN') {
-        return {
-          name: 'forbidden'
-        }
+    const logged = store.getters['auth/logged']
+    if (!logged && to.name !== 'login') {
+      return {
+        name: 'login'
       }
-    })
+    } if (logged && to.name === 'login') {
+      return {
+        name: 'tests'
+      }
+    }
+
+    const role = store.getters['auth/role']
+    if (to.meta.admin && role !== 'ADMIN') {
+      return {
+        name: 'forbidden'
+      }
+    }
   })
 </script>
 <style lang="scss">

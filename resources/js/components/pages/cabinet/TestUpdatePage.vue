@@ -28,7 +28,10 @@
             @submit="onSubmit"
           />
 
-          <v-divider class="my-8" />
+          <v-divider
+            id="divider"
+            class="my-8"
+          />
 
           <v-row>
             <v-col
@@ -60,9 +63,81 @@
                 <v-col
                   cols="12"
                 >
+                  <div class="mt-2">
+                    <v-chip
+                      variant="flat"
+                      class="mr-2"
+                    >
+                      total: <span class="font-weight-bold">{{ _get(paginationMeta, 'total', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="primary"
+                      class="mr-2"
+                    >
+                      length: <span class="font-weight-bold">{{ _get(items, 'length', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="secondary"
+                      class="mr-2"
+                    >
+                      page: <span class="font-weight-bold">{{ _get(params, 'page', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="red"
+                      class="mr-2"
+                    >
+                      perPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'perPage', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="green"
+                      class="mr-2"
+                    >
+                      lastPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'lastPage', '') }}</span>
+                    </v-chip>
+                  </div>
+                </v-col>
+                <v-col
+                  cols="12"
+                >
+                  <v-row justify="space-between">
+                    <v-col
+                      cols="12"
+                      md="9"
+                    >
+                      <v-text-field
+                        v-model="params.search"
+                        label="Пошук"
+                      />
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="3"
+                    >
+                      <v-select
+                        v-if="order"
+                        v-model="params.order"
+                        :items="order.items"
+                        itemTitle="label"
+                        itemValue="value"
+                        label="Сортувати"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col
+                  cols="12"
+                >
                   <TestQuestions
-                    v-if="_get(testData, 'questions.length', '')"
-                    :questions="_get(testData, 'questions', [])"
+                    v-if="_get(items, 'length', '')"
+                    :questions="items"
                     @update="getTest"
                   />
                   <VEmpty v-else>
@@ -70,6 +145,13 @@
                   </VEmpty>
                 </v-col>
               </v-row>
+
+              <v-pagination
+                v-if="paginationMeta && paginationMeta.lastPage > 1"
+                v-model="params.page"
+                :length="paginationMeta.lastPage"
+                class="mt-8"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -91,24 +173,62 @@
 
   const fieldsData = ref(null)
   const testData = ref(null)
-  const getTestLoading = ref(false)
+  const items = computed(() => {
+    return _get(testData.value, 'questions.items', [])
+  })
+  const sorts = computed(() => {
+    return _get(testData.value, 'questions.sorts')
+  })
+  const order = computed(() => {
+    return _get(sorts.value, 'order', '') || null
+  })
+  const paginationMeta = computed(() => {
+    return _get(testData.value, 'questions.pagination.meta', '') || null
+  })
+  const params = reactive({
+    search: null,
+    order: 'desc',
+    page: 1
+  })
+
+  watch(() => params.search, async () => {
+    params.page = 1
+    await getTest()
+  })
+  watch(() => params.page, async () => {
+    document.getElementById('divider').scrollIntoView()
+    await getTest()
+  })
+  watch(() => params.order, async () => {
+    await getTest()
+  })
+  watch(() => order.value, () => {
+    params.order = _get(order.value, 'items', []).find(item => item.current)?.value || null
+  })
+
   const getTest = async () => {
     try {
-      getTestLoading.value = true
-      const { data } = await useApi().test(route.params.test_id)
+      const { data } = await useApi().test(route.params.test_id, {
+        ...params
+      })
+      const response = data.data
+
       fieldsData.value = {
-        name: data.name,
-        description: data.description
+        name: response.name,
+        description: response.description
       }
-      testData.value = data
+      testData.value = response
     } catch (error) {
       console.error(error)
-    } finally {
-      getTestLoading.value = false
     }
   }
-  onMounted(() => {
-    getTest()
+
+  const getTestLoading = ref(false)
+  onMounted(async () => {
+    getTestLoading.value = true
+    getTest().finally(() => {
+      getTestLoading.value = false
+    })
   })
 
   const showSnackbar = inject('showSnackbar', s => {})

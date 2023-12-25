@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
       Route::put('/test', [TestController::class, 'update']);
       Route::delete('/test', [TestController::class, 'delete']);
       //question
+      Route::get('/question/{questionId}', [QuestionController::class, 'index']);
       Route::post('/question', [QuestionController::class, 'create']);
       Route::put('/question', [QuestionController::class, 'update']);
       Route::delete('/question', [QuestionController::class, 'delete']);

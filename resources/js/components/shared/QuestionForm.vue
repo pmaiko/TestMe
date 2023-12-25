@@ -9,7 +9,7 @@
       cols="12"
     >
       <v-form @submit.prevent="onSubmit">
-        <v-text-field
+        <v-textarea
           v-model="formData['question']"
           :label="$t('question') + '*'"
           :error-messages="errors['question']"

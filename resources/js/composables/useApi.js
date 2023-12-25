@@ -86,11 +86,12 @@ class Api {
   }
 
   // eslint-disable-next-line camelcase
-  test = async (test_id) => {
+  test = async (test_id, params) => {
     return window.axios({
       // eslint-disable-next-line camelcase
       url: `/test/${test_id}`,
-      method: 'GET'
+      method: 'GET',
+      params
     })
   }
 
@@ -99,6 +100,13 @@ class Api {
     return window.axios({
       // eslint-disable-next-line camelcase
       url: `/test/${test_id}/testing`,
+      method: 'GET'
+    })
+  }
+
+  question = async (questionId) => {
+    return window.axios({
+      url: `/question/${questionId}`,
       method: 'GET'
     })
   }

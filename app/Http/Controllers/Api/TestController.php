@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Pagination;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AnswerCollection;
+use App\Http\Resources\BaseJsonResource;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\TestsResult;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Testing\TestResponse;
 use Ramsey\Collection\Collection;
 
 class TestController extends Controller
@@ -26,16 +28,42 @@ class TestController extends Controller
           abort(404);
       }
 
-      $sortedQuestions = $test->questions->sortByDesc('created_at')->values();
+      $search = $request->search ?? '';
+      $order = $request->order ?? 'desc';
 
-      return response()->json(array_merge(
-          $test->toArray(),
+      $sortedQuestions = $test
+        ->questions()
+        ->where('question', 'LIKE', '%' . $search . '%')
+        ->orderBy('id', $order)
+        ->paginate(150);
 
-          ["questions" => $sortedQuestions->map(function ($question) {
-              $question['answers'] = $question->answers;
-              return $question;
-          })]
-      ));
+      $test->questions = [
+        'filters' => [],
+        'sorts' => [
+          'order' => [
+            'param' => 'order',
+            'items' => [
+              [
+                'label' => 'За зменшенням',
+                'value' => 'desc',
+                'current' => $order === 'desc'
+              ],
+              [
+                'label' => 'За зростанням',
+                'value' => 'asc',
+                'current' => $order === 'asc'
+              ]
+            ]
+          ]
+        ],
+        'items' => $sortedQuestions->map(function ($question) {
+          $question['answers'] = $question->answers;
+          return $question;
+        }),
+        'pagination' => new Pagination($sortedQuestions)
+      ];
+
+      return new BaseJsonResource($test);
     }
 
     public function testing (Request $request) {

@@ -1,12 +1,36 @@
 <template>
-  <v-expansion-panels>
-    <v-expansion-panel
-      v-for="question in questions"
-      :key="question.id"
+  <div
+    v-for="question in questions"
+    :key="question.id"
+  >
+    <v-card
+      class="mb-12"
+      elevation="6"
     >
-      <v-expansion-panel-title>
-        <span class="text-subtitle-1">{{ question.question }}</span>
-        <span class="text-grey ml-2">{{ question.description }}</span>
+      <template #title>
+        <span class="text-h6 text-wrap font-weight-bold">{{ question.question }}</span>
+      </template>
+      <template #subtitle>
+        <span class="text-subtitle-1">{{ question.description }}</span>
+      </template>
+      <template #text>
+        text
+      </template>
+      <template #actions>
+        <router-link
+          :to="{name: 'test-update-question-update', params: {
+            test_id: route.params.test_id,
+            question_id: question.id
+          }}"
+        >
+          <v-btn
+            color="success"
+            variant="flat"
+          >
+            {{ $t('edit') }}
+          </v-btn>
+        </router-link>
+
         <v-btn
           icon="mdi-delete-empty-outline"
           color="red"
@@ -15,20 +39,8 @@
           class="text-none ml-auto mx-2 my-2"
           @click.stop="onOpenDialog(question)"
         />
-      </v-expansion-panel-title>
-      <v-expansion-panel-text class="pt-8">
-        <QuestionForm
-          :type="'update'"
-          :title="$t('updatingQuestion')"
-          :buttonText="$t('updateQuestion')"
-          :loading="loading"
-          :errors="errors"
-          :fieldsData="createFieldsData(question)"
-          @submit="onSubmit"
-        />
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-
+      </template>
+    </v-card>
     <v-dialog
       v-model="dialog"
       persistent
@@ -63,11 +75,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-expansion-panels>
+  </div>
 </template>
 <script setup>
-  import QuestionForm from '~/components/shared/QuestionForm'
-
   const route = useRoute()
   const showSnackbar = inject('showSnackbar', s => {})
 
@@ -77,54 +87,20 @@
 
   const emit = defineEmits(['update'])
 
-  const errors = ref({})
   const loading = ref(false)
-  const onSubmit = async (formData) => {
-    try {
-      loading.value = true
-      errors.value = {}
-      await useApi().questionUpdate({
-        test_id: route.params.test_id,
-        ...formData
-      })
-      emit('update')
-      showSnackbar($t('updatedQuestion'))
-    } catch (error) {
-      console.error(error)
-      showSnackbar($t('error'))
-      errors.value = _get(error, 'response.data.errors') || {}
-    } finally {
-      loading.value = false
-    }
-  }
-  const createFieldsData = (question) => {
-    const answers = (_get(question, 'answers', '') || []).map(answer => {
-      return {
-        answer_id: String(answer.id) || '',
-        answer: answer.answer || '',
-        description: answer.description || '',
-        correct: !!answer.correct
-      }
-    })
-
-    return {
-      question_id: String(question.id),
-      question: question.question,
-      description: question.description,
-      answers: answers.length ? answers : null
-    }
-  }
-
   const dialog = ref(false)
   const dialogQuestion = ref(null)
+
   const onOpenDialog = (data) => {
     dialog.value = true
     dialogQuestion.value = data
   }
+
   const onCloseDialog = () => {
     dialog.value = false
     dialogQuestion.value = null
   }
+
   const onDeleteQuestion = async () => {
     try {
       loading.value = true

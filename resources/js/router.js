@@ -10,7 +10,8 @@ import SettingsPage from '~/components/pages/cabinet/SettingsPage'
 // test
 import TestCreatePage from '~/components/pages/cabinet/TestCreatePage'
 import TestUpdatePage from '~/components/pages/cabinet/TestUpdatePage'
-import QuestionCreate from '~/components/pages/cabinet/QuestionCreate'
+import QuestionCreatePage from '~/components/pages/cabinet/QuestionCreatePage'
+import QuestionUpdatePage from '~/components/pages/cabinet/QuestionUpdatePage'
 import TestingPage from '~/components/pages/cabinet/TestingPage'
 import ErrorForbidden from '~/components/ErrorForbidden'
 import ErrorNotFound from '~/components/ErrorNotFound'
@@ -65,7 +66,13 @@ const routes = [
       {
         path: 'update/:test_id/question/create',
         name: 'test-update-question-create',
-        component: QuestionCreate,
+        component: QuestionCreatePage,
+        meta: { admin: true }
+      },
+      {
+        path: 'update/:test_id/question/update/:question_id',
+        name: 'test-update-question-update',
+        component: QuestionUpdatePage,
         meta: { admin: true }
       },
       {
