@@ -61,5 +61,9 @@ export default {
   },
   next: 'Далі',
   back: 'Назад',
-  complete: 'Завершити'
+  complete: 'Завершити',
+  search: 'Пошук',
+  searchByQuestionsAndAnswers: 'Пошук за запитаннями та відповідями',
+  sort: 'Сортувати',
+  correctAnswer: 'Правильна відповідь'
 }

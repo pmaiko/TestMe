@@ -11,6 +11,7 @@ use App\Models\TestsResult;
 use App\Models\TestsResultsAnswers;
 use Illuminate\Http\Request;
 use App\Models\Test;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
@@ -33,7 +34,12 @@ class TestController extends Controller
 
       $sortedQuestions = $test
         ->questions()
-        ->where('question', 'LIKE', '%' . $search . '%')
+        ->where(function ($query) use ($search) {
+          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
+            ->orWhereHas('answers', function ($subQuery) use ($search) {
+              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
+            });
+        })
         ->orderBy('id', $order)
         ->paginate(150);
 

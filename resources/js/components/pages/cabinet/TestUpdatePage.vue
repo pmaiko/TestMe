@@ -62,64 +62,27 @@
                 </v-col>
                 <v-col
                   cols="12"
+                  class="mt-8"
                 >
-                  <div class="mt-2">
-                    <v-chip
-                      variant="flat"
-                      class="mr-2"
-                    >
-                      total: <span class="font-weight-bold">{{ _get(paginationMeta, 'total', '') }}</span>
-                    </v-chip>
-
-                    <v-chip
-                      variant="flat"
-                      color="primary"
-                      class="mr-2"
-                    >
-                      length: <span class="font-weight-bold">{{ _get(items, 'length', '') }}</span>
-                    </v-chip>
-
-                    <v-chip
-                      variant="flat"
-                      color="secondary"
-                      class="mr-2"
-                    >
-                      page: <span class="font-weight-bold">{{ _get(params, 'page', '') }}</span>
-                    </v-chip>
-
-                    <v-chip
-                      variant="flat"
-                      color="red"
-                      class="mr-2"
-                    >
-                      perPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'perPage', '') }}</span>
-                    </v-chip>
-
-                    <v-chip
-                      variant="flat"
-                      color="green"
-                      class="mr-2"
-                    >
-                      lastPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'lastPage', '') }}</span>
-                    </v-chip>
-                  </div>
-                </v-col>
-                <v-col
-                  cols="12"
-                >
-                  <v-row justify="space-between">
+                  <v-row
+                    justify="space-between"
+                  >
                     <v-col
                       cols="12"
                       md="9"
+                      class="mb-n8"
                     >
                       <v-text-field
                         v-model="params.search"
-                        label="Пошук"
+                        :clearable="true"
+                        :label="$t('searchByQuestionsAndAnswers')"
+                        :loading="getTestLoading2"
                       />
                     </v-col>
                     <v-col
                       cols="12"
                       md="3"
+                      class="mb-n8"
                     >
                       <v-select
                         v-if="order"
@@ -127,10 +90,55 @@
                         :items="order.items"
                         itemTitle="label"
                         itemValue="value"
-                        label="Сортувати"
+                        :label="$t('sort')"
+                        :loading="getTestLoading2"
                       />
                     </v-col>
                   </v-row>
+                </v-col>
+                <v-col
+                  cols="12"
+                >
+                  <div class="mx-n2">
+                    <v-chip
+                      variant="flat"
+                      class="ma-2"
+                    >
+                      total: <span class="font-weight-bold">{{ _get(paginationMeta, 'total', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="primary"
+                      class="ma-2"
+                    >
+                      length: <span class="font-weight-bold">{{ _get(items, 'length', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="secondary"
+                      class="ma-2"
+                    >
+                      page: <span class="font-weight-bold">{{ _get(params, 'page', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="red"
+                      class="ma-2"
+                    >
+                      perPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'perPage', '') }}</span>
+                    </v-chip>
+
+                    <v-chip
+                      variant="flat"
+                      color="green"
+                      class="ma-2"
+                    >
+                      lastPage: <span class="font-weight-bold">{{ _get(paginationMeta, 'lastPage', '') }}</span>
+                    </v-chip>
+                  </div>
                 </v-col>
                 <v-col
                   cols="12"
@@ -163,6 +171,9 @@
   </DefaultPage>
 </template>
 <script setup>
+  import { cloneDeep, debounce } from 'lodash'
+  import searchTextHL from 'search-text-highlight'
+
   import DefaultPage from '~/components/layout/DefaultPage'
   import TestForm from '~/components/shared/TestForm'
   import TestQuestions from '~/components/shared/TestQuestions'
@@ -171,10 +182,27 @@
 
   const route = useRoute()
 
+  const showSnackbar = inject('showSnackbar', s => {})
+  const loading = ref(false)
+  const errors = ref({})
+  const getTestLoading = ref(false)
+  const getTestLoading2 = ref(false)
   const fieldsData = ref(null)
   const testData = ref(null)
   const items = computed(() => {
-    return _get(testData.value, 'questions.items', [])
+    const questions = _get(testData.value, 'questions.items', [])
+    if (params.search) {
+      return questions.map((question) => {
+        const newQuestion = cloneDeep(question)
+        newQuestion.question = searchTextHL.highlight(newQuestion.question, params.search, { hlClass: 'bg-red-lighten-4' })
+        newQuestion.answers = newQuestion.answers?.map(answer => {
+          answer.answer = searchTextHL.highlight(answer.answer, params.search, { hlClass: 'bg-red-lighten-4' })
+          return answer
+        })
+        return newQuestion
+      })
+    }
+    return questions
   })
   const sorts = computed(() => {
     return _get(testData.value, 'questions.sorts')
@@ -193,7 +221,7 @@
 
   watch(() => params.search, async () => {
     params.page = 1
-    await getTest()
+    await getTestDeb()
   })
   watch(() => params.page, async () => {
     document.getElementById('divider').scrollIntoView()
@@ -208,6 +236,7 @@
 
   const getTest = async () => {
     try {
+      getTestLoading2.value = true
       const { data } = await useApi().test(route.params.test_id, {
         ...params
       })
@@ -220,10 +249,14 @@
       testData.value = response
     } catch (error) {
       console.error(error)
+    } finally {
+      getTestLoading2.value = false
     }
   }
+  const getTestDeb = debounce(() => {
+    getTest()
+  }, 300)
 
-  const getTestLoading = ref(false)
   onMounted(async () => {
     getTestLoading.value = true
     getTest().finally(() => {
@@ -231,9 +264,6 @@
     })
   })
 
-  const showSnackbar = inject('showSnackbar', s => {})
-  const loading = ref(false)
-  const errors = ref({})
   const onSubmit = async (formData) => {
     try {
       loading.value = true

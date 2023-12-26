@@ -1,13 +1,15 @@
 <template>
-  <v-breadcrumbs
-    v-if="_get(breadcrumbs, 'length', '')"
-    :items="breadcrumbs"
-  >
-    <template #divider>
-      <v-icon icon="mdi-chevron-right" />
-    </template>
-  </v-breadcrumbs>
-  <slot />
+  <div class="default-page h-100">
+    <v-breadcrumbs
+      v-if="_get(breadcrumbs, 'length', '')"
+      :items="breadcrumbs"
+    >
+      <template #divider>
+        <v-icon icon="mdi-chevron-right" />
+      </template>
+    </v-breadcrumbs>
+    <slot />
+  </div>
 </template>
 <script setup>
   defineProps({

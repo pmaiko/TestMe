@@ -8,15 +8,39 @@
       elevation="6"
     >
       <template #title>
-        <span class="text-h6 text-wrap font-weight-bold">{{ question.question }}</span>
+        <span
+          class="text-h6 text-wrap font-weight-bold"
+          v-html="question.question"
+        />
       </template>
       <template #subtitle>
         <span class="text-subtitle-1">{{ question.description }}</span>
       </template>
       <template #text>
-        text
+        <ul class="pl-8">
+          <li
+            v-for="({ answer }, index) in question.answers"
+            :key="index"
+            class="text-subtitle-1"
+            :class="{'mt-4': index}"
+            v-html="answer"
+          />
+        </ul>
+        <div class="d-inline-block pa-2 mt-8 bg-yellow-lighten-4 blue-lighten-4 rounded">
+          <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span class="text-subtitle-1 font-weight-bold" v-html="getCorrect(question.answers)" />
+        </div>
       </template>
       <template #actions>
+        <v-btn
+          color="red"
+          variant="flat"
+          class="ml-auto mr-4"
+          @click.stop="onOpenDialog(question)"
+        >
+          <v-icon>mdi-delete-empty-outline</v-icon>
+          {{ $t('delete') }}
+        </v-btn>
+
         <router-link
           :to="{name: 'test-update-question-update', params: {
             test_id: route.params.test_id,
@@ -27,18 +51,10 @@
             color="success"
             variant="flat"
           >
+            <v-icon>mdi-pencil</v-icon>
             {{ $t('edit') }}
           </v-btn>
         </router-link>
-
-        <v-btn
-          icon="mdi-delete-empty-outline"
-          color="red"
-          size="x-small"
-          variant="flat"
-          class="text-none ml-auto mx-2 my-2"
-          @click.stop="onOpenDialog(question)"
-        />
       </template>
     </v-card>
     <v-dialog
@@ -90,6 +106,15 @@
   const loading = ref(false)
   const dialog = ref(false)
   const dialogQuestion = ref(null)
+
+  const getCorrect = (answers) => {
+    return answers.reduce((acc, answer) => {
+      if (answer.correct) {
+        acc.push(answer.answer)
+      }
+      return acc
+    }, []).join(', ')
+  }
 
   const onOpenDialog = (data) => {
     dialog.value = true
