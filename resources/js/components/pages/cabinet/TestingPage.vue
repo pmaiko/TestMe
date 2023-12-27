@@ -46,6 +46,15 @@
   const userAnswers = ref({})
   const onUserRespond = (questionId, answer) => {
     userAnswers.value[questionId] = answer
+
+    useApi().setAnswer({
+      testId: route.params.test_id,
+      questionId: questionId,
+      answerId: answer.answerId,
+      attempt: testData.value.attempt,
+      startTime: answer.startTime,
+      endTime: answer.endTime
+    })
   }
 
   const questions = computed(() => {

@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '~/components/pages/LoginPage'
 // import CabinetPage from '~/components/pages/CabinetPage'
 import TestsPage from '~/components/pages/cabinet/TestsPage'
-import ResultsPage from '~/components/pages/cabinet/ResultsPage'
+import ResultsPage from '~/components/pages/cabinet/results/ResultsPage'
 import UsersPage from '~/components/pages/cabinet/UsersPage'
 import SettingsPage from '~/components/pages/cabinet/SettingsPage'
 
@@ -16,6 +16,10 @@ import TestingPage from '~/components/pages/cabinet/TestingPage'
 import ErrorForbidden from '~/components/ErrorForbidden'
 import ErrorNotFound from '~/components/ErrorNotFound'
 
+// result
+import ResultsTestPage from '~/components/pages/cabinet/results/ResultsTestPage'
+import ResultsTestAttempt from '~/components/pages/cabinet/results/ResultsTestAttempt'
+
 const routes = [
   {
     path: '/',
@@ -27,13 +31,62 @@ const routes = [
     children: [
       {
         path: 'tests',
-        name: 'tests',
-        component: TestsPage
+        children: [
+          {
+            path: '',
+            name: 'tests',
+            component: TestsPage
+          },
+          {
+            path: 'create',
+            name: 'test-create',
+            component: TestCreatePage,
+            meta: { admin: true }
+          },
+          {
+            path: 'update/:test_id',
+            name: 'test-update',
+            component: TestUpdatePage,
+            meta: { admin: true }
+          },
+          {
+            path: 'update/:test_id/question/create',
+            name: 'test-update-question-create',
+            component: QuestionCreatePage,
+            meta: { admin: true }
+          },
+          {
+            path: 'update/:test_id/question/update/:question_id',
+            name: 'test-update-question-update',
+            component: QuestionUpdatePage,
+            meta: { admin: true }
+          },
+          {
+            path: 'testing/:test_id',
+            name: 'testing',
+            component: TestingPage
+          }
+        ]
       },
       {
         path: 'results',
-        name: 'results',
-        component: ResultsPage
+        children: [
+          {
+            path: '',
+            name: 'results',
+            component: ResultsPage
+          },
+          {
+            path: 'test/:test_id',
+            name: 'results-test',
+            component: ResultsTestPage
+          },
+          {
+            path: 'test/:test_id/:attempt',
+            name: 'results-test-attempt',
+            component: ResultsTestAttempt
+          }
+        ]
       },
       {
         path: 'users',
@@ -45,40 +98,6 @@ const routes = [
         path: 'settings',
         name: 'settings',
         component: SettingsPage
-      }
-    ]
-  },
-  {
-    path: '/cabinet/test',
-    children: [
-      {
-        path: 'create',
-        name: 'test-create',
-        component: TestCreatePage,
-        meta: { admin: true }
-      },
-      {
-        path: 'update/:test_id',
-        name: 'test-update',
-        component: TestUpdatePage,
-        meta: { admin: true }
-      },
-      {
-        path: 'update/:test_id/question/create',
-        name: 'test-update-question-create',
-        component: QuestionCreatePage,
-        meta: { admin: true }
-      },
-      {
-        path: 'update/:test_id/question/update/:question_id',
-        name: 'test-update-question-update',
-        component: QuestionUpdatePage,
-        meta: { admin: true }
-      },
-      {
-        path: 'testing/:test_id',
-        name: 'testing',
-        component: TestingPage
       }
     ]
   },

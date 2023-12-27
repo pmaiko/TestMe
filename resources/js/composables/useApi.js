@@ -135,9 +135,9 @@ class Api {
     })
   }
 
-  getTestsWithResults = async (data) => {
+  getResultsTests = async (data) => {
     return window.axios({
-      url: '/tests-with-results',
+      url: '/results-tests',
       method: 'GET',
       data: removeEmptyFields(data)
     })
@@ -147,6 +147,21 @@ class Api {
     return window.axios({
       url: `/test-results/${testId}`,
       method: 'GET'
+    })
+  }
+
+  getTestAttempt = async (testId, attempt) => {
+    return window.axios({
+      url: `/test-results/${testId}/${attempt}`,
+      method: 'GET'
+    })
+  }
+
+  setAnswer = async (data) => {
+    return window.axios({
+      url: '/test-results/set-answer',
+      method: 'POST',
+      data: removeEmptyFields(data)
     })
   }
 }

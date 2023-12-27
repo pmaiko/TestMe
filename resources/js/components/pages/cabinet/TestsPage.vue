@@ -86,12 +86,12 @@
     {
       title: $t('menu.cabinet'),
       disabled: true,
-      href: '/cabinet'
+      to: '/cabinet'
     },
     {
       title: $t('menu.tests'),
       disabled: true,
-      href: '/cabinet/test'
+      to: '/cabinet/test'
     }
   ])
 </script>

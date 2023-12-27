@@ -65,5 +65,8 @@ export default {
   search: 'Пошук',
   searchByQuestionsAndAnswers: 'Пошук за запитаннями та відповідями',
   sort: 'Сортувати',
-  correctAnswer: 'Правильна відповідь'
+  correctAnswer: 'Правильна відповідь',
+  view: 'Переглянути',
+  test: 'Тест',
+  attempt: 'Спроба'
 }

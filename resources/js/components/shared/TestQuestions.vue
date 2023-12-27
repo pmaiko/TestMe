@@ -27,7 +27,10 @@
           />
         </ul>
         <div class="d-inline-block pa-2 mt-8 bg-yellow-lighten-4 blue-lighten-4 rounded">
-          <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span class="text-subtitle-1 font-weight-bold" v-html="getCorrect(question.answers)" />
+          <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span
+            class="text-subtitle-1 font-weight-bold"
+            v-html="getCorrect(question.answers)"
+          />
         </div>
       </template>
       <template #actions>

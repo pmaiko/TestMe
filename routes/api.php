@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/results', [ResultController::class, 'index']);
   Route::post('/result', [ResultController::class, 'create']);
 
-  Route::get('/tests-with-results', [TestsResultController::class, 'getTestsWithResults']);
+  Route::get('/results-tests', [TestsResultController::class, 'getResultsTests']);
   Route::get('/test-results/{testId}', [TestsResultController::class, 'getTestResults']);
+  Route::get('/test-results/{testId}/{attempt}', [TestsResultController::class, 'getTestAttempt']);
+  Route::post('/test-results/set-answer', [TestsResultController::class, 'setAnswer']);
 });

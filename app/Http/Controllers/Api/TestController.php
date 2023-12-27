@@ -34,10 +34,16 @@ class TestController extends Controller
 
       $sortedQuestions = $test
         ->questions()
+//        ->where(function ($query) use ($search) {
+//          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
+//            ->orWhereHas('answers', function ($subQuery) use ($search) {
+//              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
+//            });
+//        })
         ->where(function ($query) use ($search) {
-          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
+          $query->where(DB::raw('lower(question)'), 'like', '%' . strtolower($search) . '%')
             ->orWhereHas('answers', function ($subQuery) use ($search) {
-              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
+              $subQuery->where(DB::raw('lower(answer)'), 'like', '%' . strtolower($search) . '%');
             });
         })
         ->orderBy('id', $order)
@@ -93,7 +99,7 @@ class TestController extends Controller
       $attempt = Str::uuid()->toString();
 
       $test->questions->each(function (Question $question) use ($attempt) {
-        $user_id = $question->user_id;
+        $user_id = auth()->user()->id;
         $test_id = $question->test_id;
         $question_id = $question->id;
 
@@ -111,6 +117,8 @@ class TestController extends Controller
           ]);
         });
       });
+
+      $test->attempt = $attempt;
 
       return response()->json($test);
     }

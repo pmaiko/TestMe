@@ -81,6 +81,8 @@
 
   const emit = defineEmits(['userRespond', 'prev', 'next'])
 
+  const startTime = Date.now()
+
   const condition = ({ answer, success, error }) => {
     if (String(_get(props.userAnswer, 'answerId', '')) && answer.correct) {
       return success
@@ -96,7 +98,9 @@
 
     emit('userRespond', _get(props, 'question.id', ''), {
       answerId,
-      status: _get(answer, 'correct', '') ? 'success' : 'error'
+      status: _get(answer, 'correct', '') ? 'success' : 'error',
+      startTime: Math.floor(startTime / 1000),
+      endTime: Math.floor(Date.now() / 1000)
     })
   }
 

@@ -12,4 +12,8 @@ class TestsResult extends Model
   protected $table = 'tests_results';
 
   protected $guarded = [];
+
+  public function question () {
+    return $this->hasOne(Question::class, 'id', 'question_id');
+  }
 }
