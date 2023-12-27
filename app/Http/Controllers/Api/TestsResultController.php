@@ -64,8 +64,10 @@ class TestsResultController extends Controller
       $answerCorrect = $test->question->answers->first(function ($answer) use ($test) {
         return $answer->correct;
       });
-      $test->isCorrect = $answerUser->correct;
-      $test->answerCorrect = $answerCorrect->answer;
+
+      $test->isCorrect = $answerUser ? $answerUser->correct : null;
+      $test->answerCorrect = $answerCorrect ? $answerCorrect->answer : null;
+
       return $test;
     });
 
