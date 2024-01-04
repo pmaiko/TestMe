@@ -62,9 +62,15 @@
                 </td>
                 <td>{{ attempt.time || '-' }}</td>
                 <td>{{ attempt.countQuestions || '-' }}</td>
-                <td class="text-green font-weight-bold">{{ attempt.countSuccesses || '-' }}</td>
-                <td class="text-red font-weight-bold">{{ attempt.countErrors || '-' }}</td>
-                <td class="text-grey font-weight-bold">{{ attempt.countMisses || '-' }}</td>
+                <td class="text-green font-weight-bold">
+                  {{ attempt.countSuccesses || '-' }}
+                </td>
+                <td class="text-red font-weight-bold">
+                  {{ attempt.countErrors || '-' }}
+                </td>
+                <td class="text-grey font-weight-bold">
+                  {{ attempt.countMisses || '-' }}
+                </td>
                 <td>{{ attempt.percentage }}%</td>
                 <td class="text-no-wrap">
                   <router-link :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }">
