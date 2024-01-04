@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\ResultController;
-use App\Http\Controllers\Api\TestsResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,16 +45,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/tests', [TestController::class, 'index']);
   Route::get('/test/{testId}', [TestController::class, 'test']);
   Route::get('/test/{testId}/testing', [TestController::class, 'testing']);
+  Route::post('/test/{testId}/complete', [TestController::class, 'complete']);
+
   //favorite
   Route::get('/favorites', [FavoriteController::class, 'index']);
   Route::post('/favorite', [FavoriteController::class, 'create']);
   Route::delete('/favorite', [FavoriteController::class, 'delete']);
-  //result
-  Route::get('/results', [ResultController::class, 'index']);
-  Route::post('/result', [ResultController::class, 'create']);
 
-  Route::get('/results-tests', [TestsResultController::class, 'getResultsTests']);
-  Route::get('/test-results/{testId}', [TestsResultController::class, 'getTestResults']);
-  Route::get('/test-results/{testId}/{attempt}', [TestsResultController::class, 'getTestAttempt']);
-  Route::post('/test-results/set-answer', [TestsResultController::class, 'setAnswer']);
+  //result
+  Route::get('/results/tests', [ResultController::class, 'tests']);
+  Route::get('/results/{testId}', [ResultController::class, 'attempts']);
+  Route::get('/results/{testId}/{attemptId}', [ResultController::class, 'attempt']);
+  Route::post('/results/set-answer', [ResultController::class, 'setAnswer']);
 });

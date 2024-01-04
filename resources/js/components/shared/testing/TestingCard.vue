@@ -64,6 +64,7 @@
         color="pink-darken-1"
         variant="tonal"
         class="ml-auto"
+        @click="onComplete"
       >
         {{ $t('complete') }}
       </v-btn>
@@ -110,5 +111,9 @@
 
   const onNext = () => {
     emit('next')
+  }
+
+  const onComplete = () => {
+    emit('complete')
   }
 </script>

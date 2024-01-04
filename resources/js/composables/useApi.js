@@ -104,6 +104,15 @@ class Api {
     })
   }
 
+  completeTest = async (testId, data) => {
+    return window.axios({
+      // eslint-disable-next-line camelcase
+      url: `/test/${testId}/complete`,
+      method: 'POST',
+      data: removeEmptyFields(data)
+    })
+  }
+
   question = async (questionId) => {
     return window.axios({
       url: `/question/${questionId}`,
@@ -135,31 +144,32 @@ class Api {
     })
   }
 
+  // results
   getResultsTests = async (data) => {
     return window.axios({
-      url: '/results-tests',
+      url: '/results/tests',
       method: 'GET',
       data: removeEmptyFields(data)
     })
   }
 
-  getTestResults = async (testId) => {
+  getResultsAttempts = async (testId) => {
     return window.axios({
-      url: `/test-results/${testId}`,
+      url: `/results/${testId}`,
       method: 'GET'
     })
   }
 
   getTestAttempt = async (testId, attempt) => {
     return window.axios({
-      url: `/test-results/${testId}/${attempt}`,
+      url: `/results/${testId}/${attempt}`,
       method: 'GET'
     })
   }
 
   setAnswer = async (data) => {
     return window.axios({
-      url: '/test-results/set-answer',
+      url: '/results/set-answer',
       method: 'POST',
       data: removeEmptyFields(data)
     })

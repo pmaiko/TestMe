@@ -2,7 +2,10 @@
   <DefaultPage
     :breadcrumbs="breadcrumbs"
   >
-    <v-container fluid>
+    <v-container
+      fluid
+      class="h-100"
+    >
       <v-row v-if="!loading">
         <v-col
           v-if="!_get(tests, 'length', '')"
@@ -44,7 +47,7 @@
                 </v-card-item>
 
                 <v-card-actions>
-                  <router-link :to="{ name: 'results-test', params: { test_id: test.id }}">
+                  <router-link :to="{ name: 'results-test', params: { testId: test.id }}">
                     <v-btn color="secondary">
                       {{ $t('view') }}
                     </v-btn>
@@ -73,7 +76,7 @@
     try {
       loading.value = true
       const { data } = await useApi().getResultsTests()
-      tests.value = data
+      tests.value = data.data
     } catch (error) {
       console.error(error)
     } finally {

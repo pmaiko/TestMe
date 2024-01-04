@@ -7,8 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseJsonResource;
 use App\Models\Answer;
 use App\Models\Question;
-use App\Models\TestsResult;
-use App\Models\TestsResultsAnswers;
+use App\Models\Result;
+use App\Models\ResultAttempt;
+use App\Models\ResultAttemptQuestion;
+use App\Models\ResultAttemptQuestionAnswer;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\DB;
@@ -96,29 +100,37 @@ class TestController extends Controller
         abort(404);
       }
 
-      $attempt = Str::uuid()->toString();
+      // $attempt = Str::uuid()->toString();
 
-      $test->questions->each(function (Question $question) use ($attempt) {
-        $user_id = auth()->user()->id;
-        $test_id = $question->test_id;
+      $user_id = auth()->user()->id;
+      $test_id = $test->id;
+
+      $attempt = ResultAttempt::query()->create([
+        'test_id' => $test_id,
+        'user_id' => $user_id
+      ]);
+
+      $attempt_id = $attempt->id;
+
+      $test->questions->each(function (Question $question) use ($attempt_id, $test_id, $user_id) {
         $question_id = $question->id;
 
-        $testsResult = TestsResult::query()->create([
-          'attempt' => $attempt,
-          'user_id' => $user_id,
+        $testsResult = ResultAttemptQuestion::query()->create([
+          'attempt_id' => $attempt_id,
           'test_id' => $test_id,
-          'question_id' => $question_id
+          'question_id' => $question_id,
+          'user_id' => $user_id,
         ]);
 
         $question->answers->each(function (Answer $answer) use ($testsResult) {
-          TestsResultsAnswers::query()->create([
+          ResultAttemptQuestionAnswer::query()->create([
             'answer_id' => $answer->id,
-            'tests_results_id' => $testsResult->id
+            'result_attempt_question_id' => $testsResult->id
           ]);
         });
       });
 
-      $test->attempt = $attempt;
+      $test->attemptId = $attempt_id;
 
       return response()->json($test);
     }
@@ -210,5 +222,63 @@ class TestController extends Controller
         ];
 
         return response($response);
+    }
+
+    public function complete (Request $request) {
+      $fields = $request->validate([
+        'attemptId' => 'required'
+      ]);
+
+      $attemptId = $request->attemptId;
+      $testId = $request->testId;
+      $userId = auth()->user()->id;
+
+      $items = ResultAttemptQuestion::query()
+        ->where('attempt_id', $attemptId)
+        ->where('test_id', $testId)
+        ->where('user_id', auth()->user()->id)
+        ->with('answer')
+        ->get();
+
+      $time = CarbonInterval::seconds();
+      $countQuestions = $items->count();
+      $countErrors = null;
+      $countSuccesses = null;
+      $countMisses = null;
+
+      $items->each(function ($item) use (&$time, &$countErrors, &$countSuccesses, &$countMisses) {
+        $diff = Carbon::parse($item->end_time)->diff(Carbon::parse($item->start_time));
+        $time = $time->add($diff);
+
+        if (!$item->answer) {
+          $countMisses++;
+        } else if ($item->answer->correct) {
+          $countSuccesses++;
+        } else {
+          $countErrors++;
+        }
+      });
+
+      $percentage = ($countSuccesses / $countQuestions) * 100;
+
+      $result = Result::query()->create([
+        'time' => $time->format('%D:%H:%I:%S'),
+        'percentage' => round($percentage, 2),
+        'count_questions' => $countQuestions,
+        'count_errors' => $countErrors,
+        'count_successes' => $countSuccesses,
+        'count_misses' => $countMisses,
+        'attempt_id' => $attemptId,
+        'test_id' => $testId,
+        'user_id' => $userId,
+      ]);
+
+      return new BaseJsonResource([
+        'attemptId' => $result->attempt_id,
+        'time' => CarbonInterval::createFromFormat('d:h:i:s', $result->time)->format('%d дн, %h год, %i хв, %s сек'),
+        'countSuccesses' => $result->count_successes ?? 0,
+        'countErrors' => $result->count_errors ?? 0,
+        'countMisses' => $result->count_misses ?? 0
+      ]);
     }
 }

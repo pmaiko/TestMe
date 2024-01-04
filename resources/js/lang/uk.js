@@ -68,5 +68,16 @@ export default {
   correctAnswer: 'Правильна відповідь',
   view: 'Переглянути',
   test: 'Тест',
-  attempt: 'Спроба'
+  attempt: 'Спроба',
+  time: 'Час проходження',
+  countQuestions: 'Кількість питань',
+  countSuccesses: 'Кількість правильних',
+  countErrors: 'Кількість помилок',
+  countMisses: 'Кількість пропусків',
+  percentage: 'Відсоток',
+  emptyAttempts: 'Покищо немає спроб',
+  empty: 'Пусто',
+  result: 'Результат',
+  toTests: 'До тестів',
+  toResults: 'Деталі результату'
 }

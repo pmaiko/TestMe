@@ -14,18 +14,24 @@ class CreateResultsTable extends Migration
     public function up()
     {
         Schema::create('results', function (Blueprint $table) {
-            $table->id();
-            $table->timestamp('time');
-            $table->decimal('percentage', 5, 2);
-            $table->integer('count_questions');
-            $table->integer('count_errors');
-            $table->integer('count_successes');
-            $table->integer('count_misses');
-            $table->unsignedBigInteger('user_id')->unsigned()->nullable();
-            $table->unsignedBigInteger('test_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('test_id')->references('id')->on('tests')->onDelete('set null');
-            $table->timestamps();
+          $table->id();
+
+          $table->string('time')->nullable();;
+          $table->decimal('percentage', 5, 2)->nullable();;
+          $table->integer('count_questions')->nullable();;
+          $table->integer('count_errors')->nullable();;
+          $table->integer('count_successes')->nullable();;
+          $table->integer('count_misses')->nullable();;
+
+          $table->unsignedBigInteger('attempt_id')->unsigned()->nullable()->unique();
+          $table->unsignedBigInteger('test_id')->unsigned()->nullable();
+          $table->unsignedBigInteger('user_id')->unsigned()->nullable();
+
+          $table->foreign('attempt_id')->references('id')->on('result_attempts')->onDelete('set null');
+          $table->foreign('test_id')->references('id')->on('tests')->onDelete('set null');
+          $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+
+          $table->timestamps();
         });
     }
 

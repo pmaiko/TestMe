@@ -17,8 +17,8 @@ import ErrorForbidden from '~/components/ErrorForbidden'
 import ErrorNotFound from '~/components/ErrorNotFound'
 
 // result
-import ResultsTestPage from '~/components/pages/cabinet/results/ResultsTestPage'
-import ResultsTestAttempt from '~/components/pages/cabinet/results/ResultsTestAttempt'
+import ResultsTestPage from '~/components/pages/cabinet/results/ResultsAttemptsPage.vue'
+import ResultsTestAttempt from '~/components/pages/cabinet/results/ResultsAttempt.vue'
 
 const routes = [
   {
@@ -77,12 +77,12 @@ const routes = [
             component: ResultsPage
           },
           {
-            path: 'test/:test_id',
+            path: 'test/:testId',
             name: 'results-test',
             component: ResultsTestPage
           },
           {
-            path: 'test/:test_id/:attempt',
+            path: 'test/:testId/:attemptId',
             name: 'results-test-attempt',
             component: ResultsTestAttempt
           }
