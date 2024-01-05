@@ -1,6 +1,7 @@
 <template>
   <v-card
     class="h-100 mx-auto d-flex flex-column"
+    elevation="6"
   >
     <v-card-item>
       <div>

@@ -99,7 +99,7 @@
       label: $t('menu.favorites'),
       path: '/cabinet/favorites',
       name: 'favorites',
-      icon: 'mdi-heart'
+      icon: 'mdi-heart-outline'
     },
     {
       label: $t('menu.users'),
