@@ -19,24 +19,25 @@
           v-else
         >
           <v-row class="flex-wrap">
-            <!--md="4"-->
-            <!--sm="6"-->
             <v-col
-              v-for="item in items"
+              v-for="(item, index) in items"
               :key="item.id"
               cols="12"
-              class="mb-12"
+              md="10"
+              class="mb-8"
             >
               <v-card
                 elevation="6"
                 class="h-100"
               >
                 <template #title>
-                  <span
-                    class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold mr-4 clear"
-                    v-html="_get(item, 'question.text', '')"
-                  />
-                  <span class="text-caption float-right">{{ $t('time') }}: {{ item.diff }}</span>
+                  <div class="d-flex justify-space-between text-subtitle-1 text-md-h6 text-wrap font-weight-bold">
+                    {{ index + 1 }}. {{ _get(item, 'question.text', '') }}
+
+                    <FavoriteButton
+                      :questionId="_get(item, 'question.id', '')"
+                    />
+                  </div>
                 </template>
                 <template #subtitle>
                   <span class="text-subtitle-1">{{ _get(item, 'question.description', '') }}</span>
@@ -44,12 +45,23 @@
                 <template #text>
                   <ul class="pl-8">
                     <li
-                      v-for="({ text }, index) in _get(item, 'answers', '')"
+                      v-for="({ id, text, correct, description }, index) in _get(item, 'answers', '')"
                       :key="index"
                       class="text-subtitle-1"
-                      :class="{'mt-4': index}"
-                      v-html="text"
-                    />
+                      :class="[
+                        {'mt-4': index},
+                        {'text-success': (id === _get(item, 'answer.id', '') && correct) || findCorrectById(_get(item, 'answerCorrect', []), id)},
+                        {'text-error': id === _get(item, 'answer.id', '') && !correct}
+                      ]"
+                    >
+                      <div v-html="text" />
+                      <div
+                        v-if="description"
+                        class="text-caption text-grey"
+                      >
+                        {{ description }}
+                      </div>
+                    </li>
                   </ul>
                   <div
                     class="pa-2 mt-8 blue-lighten-4 rounded"
@@ -66,8 +78,12 @@
                   <div class="pa-2 mt-2 bg-yellow-lighten-4 blue-lighten-4 rounded">
                     <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span
                       class="text-subtitle-1 font-weight-bold"
-                      v-html="item.answerCorrectText"
+                      v-html="getCorrect(_get(item, 'answerCorrect', []))"
                     />
+                  </div>
+
+                  <div class="text-caption float-right mt-4">
+                    {{ $t('time') }}: <span class="font-weight-bold">{{ item.diff }}</span>
                   </div>
                 </template>
               </v-card>
@@ -85,6 +101,7 @@
   import DefaultPage from '~/components/layout/DefaultPage.vue'
   import VLoader from '~/components/UI/VLoader.vue'
   import VEmpty from '~/components/UI/VEmpty.vue'
+  import FavoriteButton from '~/components/shared/FavoriteButton.vue'
 
   const items = ref([])
   const loading = ref(true)
@@ -102,6 +119,21 @@
     } finally {
       loading.value = false
     }
+  }
+
+  const getCorrect = (answers) => {
+    return answers.reduce((acc, answer) => {
+      if (answer.correct) {
+        acc.push(answer.answer)
+      }
+      return acc
+    }, []).join(' | ')
+  }
+
+  const findCorrectById = (answers, id) => {
+    return !!answers?.find((answer) => {
+      return answer.id === id
+    })
   }
 
   onMounted(() => {

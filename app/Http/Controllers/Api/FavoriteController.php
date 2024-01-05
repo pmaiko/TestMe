@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BaseJsonResource;
 use App\Models\Answer;
 use App\Models\Favorite;
 use App\Models\Question;
@@ -24,23 +25,19 @@ class FavoriteController extends Controller
             $questions[] = $question;
         }
 
-        $response = [
-            'success' => true,
-            'favorites' => $questions
-        ];
-
-        return response($response, 201);
+        return new BaseJsonResource($questions);
+//        return response($response, 201);
     }
 
     public function create (Request $request) {
         $fields = $request->validate([
-            'question_id' => 'required|string'
+            'id' => 'required'
         ]);
 
         try {
             Favorite::create([
                 "user_id" => auth()->user()->id,
-                "question_id" => $fields['question_id']
+                "question_id" => $fields['id']
             ]);
         } catch (\Exception $e) {
             $response = [
@@ -52,19 +49,18 @@ class FavoriteController extends Controller
         }
 
         $response = [
-            'success' => true,
             'message' => __('messages.favorite_question_added')
         ];
 
-        return response($response, 201);
+        return new BaseJsonResource($response);
     }
 
     public function delete (Request $request) {
         $fields = $request->validate([
-            'id' => 'required|string|numeric'
+            'id' => 'required'
         ]);
 
-        $favorite = Favorite::where("id", $fields['id'])->where('user_id', auth()->user()->id)->delete();
+        $favorite = Favorite::where("question_id", $fields['id'])->where('user_id', auth()->user()->id)->delete();
 
         if (!$favorite) {
             $validator = Validator::make([], []);
@@ -76,10 +72,9 @@ class FavoriteController extends Controller
         }
 
         $response = [
-            'success' => true,
             'message' => __('messages.favorite_question_deleted')
         ];
 
-        return response($response, 201);
+      return new BaseJsonResource($response);
     }
 }

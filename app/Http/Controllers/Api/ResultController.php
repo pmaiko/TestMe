@@ -74,14 +74,14 @@ class ResultController extends Controller
         ->with([
           'answer' => function ($query) {
             $query
-              ->select(['id', 'answer', 'correct']);
+              ->select(['id', 'answer', 'correct', 'description']);
           }
         ])
         ->with([
           'answers' => function ($query) {
             $query
               ->select(['answer_id', 'result_attempt_question_id'])
-              ->with('answer:id,answer,correct')
+              ->with('answer:id,answer,correct,description')
               ->orderBy('id', 'asc');
           },
         ])
@@ -93,10 +93,14 @@ class ResultController extends Controller
 //  return (string)($answer->id) === (string)($test->answer_id);
 // });
 // $test->isCorrect = $answerCorrect->isEmpty() ? $answerUser->correct : null;
-        $answerCorrect = $test->answers->filter(function (ResultAttemptQuestionAnswer $answer) use ($test) {
+        $answerCorrect = $test->answers
+          ->filter(function (ResultAttemptQuestionAnswer $answer) use ($test) {
           return $answer->answer ? $answer->answer->correct : false;
-        });
-        $test->answerCorrectText = !$answerCorrect->isEmpty() ? $answerCorrect->pluck('answer.answer')->join(' | ') : null;
+        })->map(function ($answer) {
+          return $answer->answer;
+        })->values();
+//        $test->answerCorrectText = !$answerCorrect->isEmpty() ? $answerCorrect->pluck('answer.answer')->join(' | ') : null;
+        $test->answerCorrect = !$answerCorrect->isEmpty() ? $answerCorrect : null;
 
         return $test;
       });
@@ -115,18 +119,23 @@ class ResultController extends Controller
           'endTime' => $test->end_time,
           'diff' => $diff,
           'answer' => $test->answer ? [
+            'id' => $test->answer->id,
             'text' => $test->answer->answer,
-            'correct' => $test->answer->correct
+            'correct' => $test->answer->correct,
+            'description' => $test->answer->description
           ] : null,
-          'answerCorrectText' => $test->answerCorrectText,
+          'answerCorrect' => $test->answerCorrect,
           'question' => $test->question ? [
+            'id' => $test->question->id,
             'text' => $test->question->question,
             'description' => $test->question->description
           ] : null,
           'answers' => $test->answers ? $test->answers->map(function ($answer) {
             return [
+              'id' => $answer->answer->id,
               'text' => $answer->answer->answer,
-              'correct' => $answer->answer->correct
+              'correct' => $answer->answer->correct,
+              'description' => $answer->answer->description
             ];
           }) : null,
           'time' => ''

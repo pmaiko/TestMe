@@ -15,6 +15,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import colors from 'vuetify/lib/util/colors'
 
 window._ = require('lodash')
 window.axios = require('axios')
@@ -25,7 +26,18 @@ window.axios.defaults.headers.common['Accept-Language'] = 'uk'
 
 const vuetify = createVuetify({
   components,
-  directives
+  directives,
+  theme: {
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          primary: colors.blue.base,
+          secondary: colors.pink.base
+        }
+      }
+    }
+  }
 })
 
 

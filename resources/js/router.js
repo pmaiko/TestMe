@@ -17,8 +17,11 @@ import ErrorForbidden from '~/components/ErrorForbidden'
 import ErrorNotFound from '~/components/ErrorNotFound'
 
 // result
-import ResultsTestPage from '~/components/pages/cabinet/results/ResultsAttemptsPage.vue'
-import ResultsTestAttempt from '~/components/pages/cabinet/results/ResultsAttempt.vue'
+import ResultsTestPage from '~/components/pages/cabinet/results/ResultsAttemptsPage'
+import ResultsTestAttempt from '~/components/pages/cabinet/results/ResultsAttempt'
+
+// favorites
+import FavoritesPage from '~/components/pages/cabinet/favorites/FavoritesPage.vue'
 
 const routes = [
   {
@@ -85,6 +88,16 @@ const routes = [
             path: 'test/:testId/:attemptId',
             name: 'results-test-attempt',
             component: ResultsTestAttempt
+          }
+        ]
+      },
+      {
+        path: 'favorites',
+        children: [
+          {
+            path: '',
+            name: 'favorites',
+            component: FavoritesPage
           }
         ]
       },

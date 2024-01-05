@@ -56,7 +56,10 @@
                 :key="index"
               >
                 <td>
-                  <router-link :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }">
+                  <router-link
+                    :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }"
+                    class="text-blue text-decoration-none"
+                  >
                     {{ attempt.attemptId || '-' }}
                   </router-link>
                 </td>
@@ -73,7 +76,10 @@
                 </td>
                 <td>{{ attempt.percentage }}%</td>
                 <td class="text-no-wrap">
-                  <router-link :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }">
+                  <router-link
+                    :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }"
+                    class="text-blue text-decoration-none"
+                  >
                     {{ useFormattedDate(attempt.createdAt).formattedDateTime || '-' }}
                   </router-link>
                 </td>

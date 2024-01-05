@@ -1,7 +1,7 @@
 <template>
   <DefaultPage>
     <v-container fluid>
-      users-page
+      У розробці
     </v-container>
   </DefaultPage>
 </template>

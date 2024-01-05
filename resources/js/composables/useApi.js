@@ -174,6 +174,30 @@ class Api {
       data: removeEmptyFields(data)
     })
   }
+
+  // favorites
+  favorites = async () => {
+    return window.axios({
+      url: '/favorites',
+      method: 'GET'
+    })
+  }
+
+  addFavorite = async (data) => {
+    return window.axios({
+      url: '/favorite',
+      method: 'POST',
+      data: removeEmptyFields(data)
+    })
+  }
+
+  deleteFavorite = async (data) => {
+    return window.axios({
+      url: '/favorite',
+      method: 'DELETE',
+      data: removeEmptyFields(data)
+    })
+  }
 }
 
 

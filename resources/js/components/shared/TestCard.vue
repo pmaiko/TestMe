@@ -20,21 +20,6 @@
       class="flex-wrap mt-auto"
     >
       <router-link
-        v-if="isAdmin"
-        :to="{name: 'test-update', params: { test_id: props.id }}"
-      >
-        <v-btn
-          color="primary"
-          variant="flat"
-          class="text-none mx-2 my-2"
-        >
-          <template #prepend>
-            <v-icon icon="mdi-pencil" />
-          </template>
-          {{ $t('edit') }}
-        </v-btn>
-      </router-link>
-      <router-link
         :to="{name: 'testing', params: { test_id: props.id }}"
         class="mr-auto"
       >
@@ -47,6 +32,21 @@
             <v-icon icon="mdi mdi-clock-start" />
           </template>
           {{ $t('toStart') }}
+        </v-btn>
+      </router-link>
+      <router-link
+        v-if="isAdmin"
+        :to="{name: 'test-update', params: { test_id: props.id }}"
+      >
+        <v-btn
+          color="secondary"
+          variant="flat"
+          class="text-none mx-2 my-2"
+        >
+          <template #prepend>
+            <v-icon icon="mdi-pencil" />
+          </template>
+          {{ $t('edit') }}
         </v-btn>
       </router-link>
 

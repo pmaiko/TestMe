@@ -8,10 +8,16 @@
       elevation="6"
     >
       <template #title>
-        <span
-          class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold"
-          v-html="question.question"
-        />
+        <div class="d-flex justify-space-between">
+          <span
+            class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold"
+            v-html="question.question"
+          />
+
+          <FavoriteButton
+            :questionId="question.id"
+          />
+        </div>
       </template>
       <template #subtitle>
         <span class="text-subtitle-1">{{ question.description }}</span>
@@ -19,12 +25,19 @@
       <template #text>
         <ul class="pl-8">
           <li
-            v-for="({ answer }, index) in question.answers"
+            v-for="({ answer, description }, index) in question.answers"
             :key="index"
             class="text-subtitle-1"
             :class="{'mt-4': index}"
-            v-html="answer"
-          />
+          >
+            <div v-html="answer" />
+            <div
+              v-if="description"
+              class="text-caption text-grey"
+            >
+              {{ description }}
+            </div>
+          </li>
         </ul>
         <div class="d-inline-block pa-2 mt-8 bg-yellow-lighten-4 blue-lighten-4 rounded">
           <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span
@@ -97,6 +110,8 @@
   </div>
 </template>
 <script setup>
+  import FavoriteButton from '~/components/shared/FavoriteButton.vue'
+
   const route = useRoute()
   const showSnackbar = inject('showSnackbar', s => {})
 
@@ -116,7 +131,7 @@
         acc.push(answer.answer)
       }
       return acc
-    }, []).join(', ')
+    }, []).join(' | ')
   }
 
   const onOpenDialog = (data) => {

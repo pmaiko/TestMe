@@ -1,5 +1,3 @@
-import * as api from '~/api'
-
 export default {
   namespaced: true,
 
@@ -42,7 +40,7 @@ export default {
 
     async logout ({ dispatch }) {
       try {
-        api.logout()
+        useApi().logout()
       } catch (error) {
         console.error(error)
       }
@@ -64,7 +62,7 @@ export default {
 
     async getUserCurrent ({ dispatch }) {
       try {
-        const { data } = await api.user()
+        const { data } = await useApi().user()
         await dispatch('setUser', { user: data })
         return Promise.resolve(data)
       } catch (error) {

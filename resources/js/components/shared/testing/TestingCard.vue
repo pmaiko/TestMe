@@ -2,11 +2,16 @@
   <v-card
     elevation="6"
   >
-    <v-card-title class="text-subtitle-1 text-md-h6 font-weight-bold text-none text-wrap">
-      {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }}
-      <span
-        v-if="String(_get(userAnswer, 'answerId', ''))"
-        class="text-blue mdi mdi-check-circle-outline"
+    <v-card-title class="d-flex justify-space-between">
+      <span class="text-subtitle-1 text-md-h6 font-weight-bold text-none text-wrap">
+        {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }}
+        <span
+          v-if="String(_get(userAnswer, 'answerId', ''))"
+          class="text-blue mdi mdi-check-circle-outline"
+        />
+      </span>
+      <FavoriteButton
+        :questionId="question.id"
       />
     </v-card-title>
     <v-card-subtitle
@@ -73,6 +78,8 @@
   </v-card>
 </template>
 <script setup>
+  import FavoriteButton from '~/components/shared/FavoriteButton.vue'
+
   const props = defineProps({
     question: Object,
     userAnswer: Object,

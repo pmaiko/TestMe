@@ -1,7 +1,7 @@
 <template>
   <DefaultPage>
     <v-container fluid>
-      settings-page
+      У розробці
     </v-container>
   </DefaultPage>
 </template>

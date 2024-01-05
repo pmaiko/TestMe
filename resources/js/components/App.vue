@@ -40,12 +40,12 @@
           class="text-subtitle-1 font-weight-bold"
         >{{ _get(user, 'name', '') || '-' }}</span>
       </v-app-bar-title>
-      <v-btn
-        v-if="logged"
-        icon
-      >
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+      <!--<v-btn-->
+      <!--  v-if="logged"-->
+      <!--  icon-->
+      <!--&gt;-->
+      <!--  <v-icon>mdi-heart</v-icon>-->
+      <!--</v-btn>-->
       <button
         v-if="logged"
         class="mr-5"
@@ -96,6 +96,12 @@
       icon: 'mdi-chart-line'
     },
     {
+      label: $t('menu.favorites'),
+      path: '/cabinet/favorites',
+      name: 'favorites',
+      icon: 'mdi-heart'
+    },
+    {
       label: $t('menu.users'),
       path: '/cabinet/users',
       name: 'users',
@@ -138,6 +144,10 @@
       return {
         name: 'forbidden'
       }
+    }
+
+    if (logged) {
+      store.dispatch('favorites/fetch')
     }
   })
 </script>

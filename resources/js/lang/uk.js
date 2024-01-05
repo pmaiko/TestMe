@@ -15,6 +15,7 @@ export default {
     cabinet: 'Кабінет',
     tests: 'Тести',
     results: 'Результати',
+    favorites: 'Улюблене',
     users: 'Користувачі',
     settings: 'Налаштування'
   },
@@ -79,5 +80,6 @@ export default {
   empty: 'Пусто',
   result: 'Результат',
   toTests: 'До тестів',
-  toResults: 'Деталі результату'
+  toResults: 'Деталі результату',
+  emptyFavorites: 'Покищо немає улюблених'
 }

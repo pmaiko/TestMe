@@ -28,9 +28,10 @@
               class="h-auto"
             >
               <v-card
-                class="mx-auto"
-                color="primary"
+                class="mx-auto h-100 d-flex flex-column"
+                color="white"
                 variant="elevated"
+                elevation="6"
               >
                 <v-card-item>
                   <div>
@@ -46,9 +47,14 @@
                   </div>
                 </v-card-item>
 
-                <v-card-actions>
-                  <router-link :to="{ name: 'results-test', params: { testId: test.id }}">
-                    <v-btn color="secondary">
+                <v-card-actions class="mt-auto">
+                  <router-link
+                    :to="{ name: 'results-test', params: { testId: test.id }}"
+                  >
+                    <v-btn
+                      color="secondary"
+                      variant="flat"
+                    >
                       {{ $t('view') }}
                     </v-btn>
                   </router-link>
