@@ -262,7 +262,7 @@ class TestController extends Controller
       $percentage = ($countSuccesses / $countQuestions) * 100;
 
       $result = Result::query()->create([
-        'time' => $time->format('%D:%H:%I:%S'),
+        'time' => $time->cascade()->format('%D:%H:%I:%S'),
         'percentage' => round($percentage, 2),
         'count_questions' => $countQuestions,
         'count_errors' => $countErrors,
@@ -275,7 +275,8 @@ class TestController extends Controller
 
       return new BaseJsonResource([
         'attemptId' => $result->attempt_id,
-        'time' => CarbonInterval::createFromFormat('d:h:i:s', $result->time)->format('%d дн, %h год, %i хв, %s сек'),
+        'time' => CarbonInterval::createFromFormat('d:h:i:s', $result->time)->format('%H:%I:%S'),
+        'percentage' => $result->percentage ?? 0,
         'countSuccesses' => $result->count_successes ?? 0,
         'countErrors' => $result->count_errors ?? 0,
         'countMisses' => $result->count_misses ?? 0

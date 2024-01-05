@@ -35,7 +35,7 @@ class ResultController extends Controller
 
       return new BaseJsonResource($attempts->map(function ($attempt) {
         return [
-          'time' => CarbonInterval::createFromFormat('d:h:i:s', $attempt->time)->format('%d дн, %h год, %i хв, %s сек'),
+          'time' => CarbonInterval::createFromFormat('d:h:i:s', $attempt->time)->format('%H:%I:%S'),
           'attemptId' => $attempt->attempt_id,
           'countQuestions' => $attempt->count_questions,
           'countSuccesses' => $attempt->count_successes,
@@ -103,7 +103,7 @@ class ResultController extends Controller
 
 //      return new BaseJsonResource($tests);
       return new BaseJsonResource($tests->map(function ($test) {
-        $diff = Carbon::parse($test->end_time)->diff(Carbon::parse($test->start_time))->format('%d дн, %h год, %i хв, %s сек');
+        $diff = Carbon::parse($test->end_time)->diff(Carbon::parse($test->start_time))->format('%H:%I:%S');
 
         return [
           'id' => $test->id,

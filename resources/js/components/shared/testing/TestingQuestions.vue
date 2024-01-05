@@ -2,8 +2,9 @@
   <v-row>
     <v-col
       cols="12"
+      class="py-0"
     >
-      <p class="text-h6 text-uppercase">
+      <p class="text-subtitle-1">
         {{ $t('questions') }}
       </p>
     </v-col>
@@ -15,18 +16,18 @@
       cols="auto"
     >
       <v-btn
-        :color="_get(question, 'id', '') === _get(modelValue, 'id', '') ? 'white': _get(userAnswers[_get(question, 'id', '')], 'status', '') || 'grey'"
-        density="compact"
+        :color="_get(question, 'id', '') === _get(modelValue, 'id', '') ? 'primary': _get(userAnswers[_get(question, 'id', '')], 'status', '') || 'grey'"
         icon=""
+        :class="{'font-weight-bold': _get(question, 'id', '') === _get(modelValue, 'id', '')}"
         @click="onClickQuestion(question)"
       >
         {{ index + 1 }}
-        <v-tooltip
-          activator="parent"
-          location="top"
-        >
-          {{ _get(question, 'question', '') }}
-        </v-tooltip>
+        <!--<v-tooltip-->
+        <!--  activator="parent"-->
+        <!--  location="top"-->
+        <!--&gt;-->
+        <!--  {{ _get(question, 'question', '') }}-->
+        <!--</v-tooltip>-->
       </v-btn>
     </v-col>
   </v-row>

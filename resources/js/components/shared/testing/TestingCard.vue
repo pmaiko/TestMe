@@ -1,9 +1,10 @@
 <template>
   <v-card
-    class="pa-4"
+    elevation="6"
   >
-    <v-card-title class="text-h6 font-weight-bold text-none text-wrap">
-      {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }} <span
+    <v-card-title class="text-subtitle-1 text-md-h6 font-weight-bold text-none text-wrap">
+      {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }}
+      <span
         v-if="String(_get(userAnswer, 'answerId', ''))"
         class="text-blue mdi mdi-check-circle-outline"
       />
@@ -19,7 +20,7 @@
       :class="[
         { 'pointer-events-none-': String(_get(userAnswer, 'answerId', '')) }
       ]"
-      class="mt-4 ml-8"
+      class="ml-4"
     >
       <div
         v-for="(answer, index) in _get(question, 'answers', [])"

@@ -9,7 +9,7 @@
     >
       <template #title>
         <span
-          class="text-h6 text-wrap font-weight-bold"
+          class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold"
           v-html="question.question"
         />
       </template>

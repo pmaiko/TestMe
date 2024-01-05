@@ -6,6 +6,11 @@
 
     <title>TestMe</title>
 
+    <style>
+        a[href*="www.000webhost.com"] {
+            display: none;
+        }
+    </style>
     <!-- Fonts -->
 {{--    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">--}}
 

@@ -33,7 +33,7 @@
               >
                 <template #title>
                   <span
-                    class="text-h6 text-wrap font-weight-bold mr-4 clear"
+                    class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold mr-4 clear"
                     v-html="_get(item, 'question.text', '')"
                   />
                   <span class="text-caption float-right">{{ $t('time') }}: {{ item.diff }}</span>

@@ -38,7 +38,7 @@
               cols="12"
               class="px-sm-8"
             >
-              <p class="text-h6 text-uppercase">
+              <p class="text-h6">
                 {{ $t('questions') }}
               </p>
               <v-row>
