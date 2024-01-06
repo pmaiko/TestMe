@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseJsonResource;
+use App\Http\Resources\QuestionResource;
 use App\Models\Answer;
 use App\Models\Favorite;
 use App\Models\Question;
@@ -13,20 +14,21 @@ use Illuminate\Support\Facades\Validator;
 class FavoriteController extends Controller
 {
     public function index () {
-        $favorites = Favorite::where("user_id", auth()->user()->id)->get();
+        $favorites = Favorite::query()
+          ->where('user_id', auth()->user()->id)
+          ->orderBy('updated_at', 'desc')
+          ->with(['question', 'question.answers' => function ($query) {
+            $query->select(['question_id', 'id', 'answer', 'description', 'correct']);
+          }])
+          ->get();
 
-        $questions = [];
-        foreach ($favorites as $favorite) {
-            $question = Question::where("id", $favorite->question_id)->first();
-            $answers = Answer::where("question_id", $favorite->question_id)->where("test_id", $question->test_id)->get();
-
-            $question['favorite_id'] = $favorite->id;
-            $question['answers'] = $answers;
-            $questions[] = $question;
-        }
-
-        return new BaseJsonResource($questions);
-//        return response($response, 201);
+        return new BaseJsonResource($favorites->map(function ($favorite) {
+          return [
+            'question' => new QuestionResource($favorite->question),
+            'createdAt' => $favorite->created_at,
+            'updatedAt' => $favorite->updated_at,
+          ];
+        }));
     }
 
     public function create (Request $request) {

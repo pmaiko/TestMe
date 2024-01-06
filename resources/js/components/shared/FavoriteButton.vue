@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    size="small"
+    size="x-small"
     icon=""
     variant="outlined"
     class="d-block ml-1"
@@ -11,7 +11,7 @@
       v-if="inFavorite"
       aria-label="add to favorites"
     >
-      mdi-heart
+      {{ deleteIcon }}
     </v-icon>
     <v-icon
       v-else
@@ -23,7 +23,11 @@
 </template>
 <script setup>
   const props = defineProps({
-    questionId: [String, Number]
+    questionId: [String, Number],
+    deleteIcon: {
+      type: String,
+      default: 'mdi-heart'
+    }
   })
 
   const showSnackbar = inject('showSnackbar', s => {})

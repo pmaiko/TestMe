@@ -5,7 +5,7 @@
       class="h-100"
     >
       <v-row class="h-100">
-        <v-col v-if="!getTestLoading && testData">
+        <v-col v-if="!getTestLoading && _get(testData, 'questions.length', '')">
           <TestingCard
             :key="_get(activeQuestion, 'id', '')"
             :question="activeQuestion"
@@ -166,7 +166,7 @@
   const getTest = async () => {
     try {
       getTestLoading.value = true
-      const { data } = await useApi().testing(route.params.test_id)
+      const { data: { data } } = await useApi().testing(route.params.test_id)
       testData.value = data
       activeQuestion.value = _get(data, 'questions.0', '') || null
     } catch (error) {
@@ -178,27 +178,6 @@
   onMounted(() => {
     getTest()
   })
-
-  // const showSnackbar = inject('showSnackbar', s => {})
-  // const loading = ref(false)
-  // const errors = ref({})
-  // const onSubmit = async (formData) => {
-  //   try {
-  //     loading.value = true
-  //     errors.value = {}
-  //     const { data } = await api.testUpdate({
-  //       id: route.params.test_id,
-  //       ...formData
-  //     })
-  //     showSnackbar(_get(data, 'message', ''))
-  //   } catch (error) {
-  //     showSnackbar($t('error'))
-  //     errors.value = _get(error, 'response.data.errors') || {}
-  //     console.error(error)
-  //   } finally {
-  //     loading.value = false
-  //   }
-  // }
 
   const breadcrumbs = computed(() => [
     {

@@ -22,12 +22,20 @@
             <v-col
               v-for="(favorite, index) in favorites"
               :key="index"
-              md="4"
-              sm="6"
               cols="12"
-              class="h-auto"
+              class="mb-8"
             >
-              {{ favorite }}
+              <div
+                v-if="favorite.updatedAt"
+                class="text-caption mb-2"
+              >
+                {{ $t('addedAt') }}: <span class="font-weight-bold">{{ useFormattedDate(favorite.updatedAt).formattedDateTime }}</span>
+              </div>
+
+              <TestInfoCard
+                v-bind="favorite.question"
+                deleteIcon="mdi-trash-can-outline"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -42,6 +50,8 @@
   import DefaultPage from '~/components/layout/DefaultPage.vue'
   import VLoader from '~/components/UI/VLoader.vue'
   import VEmpty from '~/components/UI/VEmpty.vue'
+  import TestInfoCard from '~/components/shared/TestInfoCard.vue'
+  import { useFormattedDate } from '~/composables/useDate'
 
   const store = useStore()
 

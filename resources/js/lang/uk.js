@@ -81,5 +81,8 @@ export default {
   result: 'Результат',
   toTests: 'До тестів',
   toResults: 'Деталі результату',
-  emptyFavorites: 'Покищо немає улюблених'
+  emptyFavorites: 'Покищо немає улюблених',
+  createdAt: 'Дата створення',
+  updatedAt: 'Дата оновлення',
+  addedAt: 'Дата додавання'
 }

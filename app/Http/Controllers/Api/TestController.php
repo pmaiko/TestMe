@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Pagination;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BaseJsonResource;
+use App\Http\Resources\QuestionCollection;
 use App\Models\Answer;
 use App\Models\Question;
 use App\Models\Result;
@@ -17,9 +18,6 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Testing\TestResponse;
-use Ramsey\Collection\Collection;
 
 class TestController extends Controller
 {
@@ -38,12 +36,7 @@ class TestController extends Controller
 
       $sortedQuestions = $test
         ->questions()
-//        ->where(function ($query) use ($search) {
-//          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
-//            ->orWhereHas('answers', function ($subQuery) use ($search) {
-//              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
-//            });
-//        })
+        ->select(['test_id', 'id', 'question', 'description', 'created_at', 'updated_at'])
         ->where(function ($query) use ($search) {
           $query->where(DB::raw('lower(question)'), 'like', '%' . strtolower($search) . '%')
             ->orWhereHas('answers', function ($subQuery) use ($search) {
@@ -60,22 +53,19 @@ class TestController extends Controller
             'param' => 'order',
             'items' => [
               [
-                'label' => 'За зменшенням',
+                'label' => __('messages.desc'),
                 'value' => 'desc',
                 'current' => $order === 'desc'
               ],
               [
-                'label' => 'За зростанням',
+                'label' => __('messages.asc'),
                 'value' => 'asc',
                 'current' => $order === 'asc'
               ]
             ]
           ]
         ],
-        'items' => $sortedQuestions->map(function ($question) {
-          $question['answers'] = $question->answers;
-          return $question;
-        }),
+        'items' => new QuestionCollection($sortedQuestions),
         'pagination' => new Pagination($sortedQuestions)
       ];
 
@@ -83,7 +73,6 @@ class TestController extends Controller
     }
 
     public function testing (Request $request) {
-      // $test = Test::where('id', $request->testId)->with(['questionsRandom', 'questionsRandom.answers'])->first();
       $test = Test::query()
         ->where('id', $request->testId)
         ->with(['questions' => function ($query) {
@@ -92,6 +81,7 @@ class TestController extends Controller
             ->limit(150);
         }, 'questions.answers' => function  ($query) {
           $query
+          ->select(['question_id', 'id', 'answer', 'description', 'correct'])
           ->inRandomOrder(1);
         }])
         ->first();
@@ -100,26 +90,24 @@ class TestController extends Controller
         abort(404);
       }
 
-      // $attempt = Str::uuid()->toString();
-
-      $user_id = auth()->user()->id;
-      $test_id = $test->id;
+      $userId = auth()->user()->id;
+      $testId = $test->id;
 
       $attempt = ResultAttempt::query()->create([
-        'test_id' => $test_id,
-        'user_id' => $user_id
+        'test_id' => $testId,
+        'user_id' => $userId
       ]);
 
-      $attempt_id = $attempt->id;
+      $attemptId = $attempt->id;
 
-      $test->questions->each(function (Question $question) use ($attempt_id, $test_id, $user_id) {
+      $test->questions->each(function (Question $question) use ($attemptId, $testId, $userId) {
         $question_id = $question->id;
 
         $testsResult = ResultAttemptQuestion::query()->create([
-          'attempt_id' => $attempt_id,
-          'test_id' => $test_id,
+          'attempt_id' => $attemptId,
+          'test_id' => $testId,
           'question_id' => $question_id,
-          'user_id' => $user_id,
+          'user_id' => $userId,
         ]);
 
         $question->answers->each(function (Answer $answer) use ($testsResult) {
@@ -130,9 +118,16 @@ class TestController extends Controller
         });
       });
 
-      $test->attemptId = $attempt_id;
-
-      return response()->json($test);
+      return new BaseJsonResource([
+        'questions' => new QuestionCollection($test->questions),
+        'attemptId' => $attemptId,
+        'id' => $testId,
+        'name' => $test->name,
+        'description' => $test->description,
+        'userId' => $test->user_id,
+        'createdAt' => $test->created_at,
+        'updatedAt' => $test->updated_at,
+      ]);
     }
 
     public function create (Request $request) {
@@ -283,3 +278,11 @@ class TestController extends Controller
       ]);
     }
 }
+
+
+//        ->where(function ($query) use ($search) {
+//          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
+//            ->orWhereHas('answers', function ($subQuery) use ($search) {
+//              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
+//            });
+//        })

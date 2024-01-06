@@ -11,4 +11,6 @@ return [
     'favorite_question_added' => 'Питання додано до улюблених',
     'favorite_question_deleted' => 'Питання видалено з улюблених',
     'result_saved' => 'Результат збережено',
+    'asc' => 'За зростанням',
+    'desc' => 'За зменшенням'
 ];

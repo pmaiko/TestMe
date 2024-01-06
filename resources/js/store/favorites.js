@@ -9,7 +9,7 @@ export default {
   getters: {
     favorites: state => state.favorites,
     favoritesIds: state => state.favorites?.map((favorite) => {
-      return favorite.id
+      return _get(favorite, 'question.id', '')
     }),
     loading: state => state.loading
   },

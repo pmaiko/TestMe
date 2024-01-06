@@ -35,6 +35,7 @@
           :name="`questionId-${question.id}-answerId-${answer.id}`"
           :label="answer.answer"
           :value="answer.id"
+          :readonly="!!String(_get(userAnswer, 'answerId', ''))"
           :color="condition({ answer, success: 'green', error: 'red' })"
           :class="[
             'mt-2',
