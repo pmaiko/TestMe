@@ -4,7 +4,7 @@
   >
     <v-card-title class="d-flex justify-space-between">
       <span class="text-subtitle-1 text-md-h6 font-weight-bold text-none text-wrap">
-        {{ currentIndex + 1 }}. {{ _get(question, 'question', '') }}
+        {{ currentIndex + 1 }}. <span v-html="_get(question, 'question', '')" />
         <span
           v-if="String(_get(userAnswer, 'answerId', ''))"
           class="text-blue mdi mdi-check-circle-outline"

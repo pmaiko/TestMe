@@ -9,8 +9,6 @@ use App\Http\Resources\BaseJsonResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Result;
 use App\Models\ResultAttemptQuestion;
-use App\Models\ResultAttemptQuestionAnswer;
-use App\Models\Test;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
@@ -89,31 +87,35 @@ class ResultController extends Controller {
       ])
       ->get();
 
-//    $results = $results->map(function ($question) {
-  // $answerUser = $test->question->answers->first(function ($answer) use ($test) {
-  //  return (string)($answer->id) === (string)($test->answer_id);
-  // });
-  // $test->isCorrect = $answerCorrect->isEmpty() ? $answerUser->correct : null;
-  // $test->answerCorrectText = !$answerCorrect->isEmpty() ? $answerCorrect->pluck('answer.answer')->join(' | ') : null;
+    // $results = $results->map(function ($result) {
+    //  $answerUser = $result->question->answers->first(function ($answer) use ($test) {
+    //    return (string)($answer->id) === (string)($test->answer_id);
+    //  });
+    //  $test->isCorrect = $answerCorrect->isEmpty() ? $answerUser->correct : null;
+    //  $test->answerCorrectText = !$answerCorrect->isEmpty() ? $answerCorrect->pluck('answer.answer')->join(' | ') : null;
+    //
+    //  $answerCorrect = $result->answers
+    //      ->filter(function (ResultAttemptQuestionAnswer $answer) use ($result) {
+    //      return $answer->answer ? $answer->answer->correct : false;
+    //    })->map(function ($answer) {
+    //      return $answer->answer;
+    //    })->values();
+    //  $result->answerCorrect = !$answerCorrect->isEmpty() ? $answerCorrect : null;
+    //
+    //    return $result;
+    // });
 
-//      $answerCorrect = $question->answers
-//        ->filter(function (ResultAttemptQuestionAnswer $answer) use ($question) {
-//        return $answer->answer ? $answer->answer->correct : false;
-//      })->map(function ($answer) {
-//        return $answer->answer;
-//      })->values();
-//      $question->answerCorrect = !$answerCorrect->isEmpty() ? $answerCorrect : null;
-
-//      return $question;
-//    });
-
-    return new BaseJsonResource($results->map(function ($result) {
+    return new BaseJsonResource($results->filter(function ($result) { return $result->question; })->map(function ($result) {
       $diff = Carbon::parse($result->end_time)->diff(Carbon::parse($result->start_time))->format('%H:%I:%S');
 
       return [
         'question' => new QuestionResource($result->question),
-        'answers' => new AnswerCollection($result->answers->map(function ($answer) {
-          return $answer->answer;
+        'answers' => new AnswerCollection($result->answers
+          ->filter(function ($answer) {
+            return $answer->answer;
+        })
+          ->map(function ($answer) {
+            return $answer->answer;
         })),
         'answer' => new AnswerResource($result->answer),
         'answerId' => $result->answer_id,

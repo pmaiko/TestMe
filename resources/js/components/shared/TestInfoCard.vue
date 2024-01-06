@@ -22,7 +22,10 @@
     </template>
 
     <template #text>
-      <ul class="pl-8 mb-8">
+      <ul
+        v-if="_get(answers, 'length', '')"
+        class="pl-8 mb-8"
+      >
         <li
           v-for="(item, index) in answers"
           :key="index"
@@ -56,10 +59,13 @@
         />
       </div>
 
-      <div class="pa-2 mt-2 bg-yellow-lighten-4 blue-lighten-4 rounded">
+      <div
+        v-if="correctAnswer"
+        class="pa-2 mt-2 bg-yellow-lighten-4 blue-lighten-4 rounded"
+      >
         <span class="text-subtitle-1">{{ $t('correctAnswer') }}:</span> <span
           class="text-subtitle-1 font-weight-bold"
-          v-html="getCorrect(answers)"
+          v-html="correctAnswer"
         />
       </div>
 
@@ -95,7 +101,7 @@
   import FavoriteButton from '~/components/shared/FavoriteButton'
   // import { useFormattedDate } from '~/composables/useDate'
 
-  defineProps({
+  const props = defineProps({
     id: [String, Number],
     question: String,
     questionId: String,
@@ -108,14 +114,14 @@
     deleteIcon: String
   })
 
-  const getCorrect = (answers) => {
-    return answers?.reduce((acc, answer) => {
+  const correctAnswer = computed(() => {
+    return props.answers?.reduce((acc, answer) => {
       if (answer.correct) {
         acc.push(answer.answer)
       }
       return acc
     }, []).join(' | ')
-  }
+  })
 
   const findCorrectById = (answers, id) => {
     return !!answers?.find((answer) => {

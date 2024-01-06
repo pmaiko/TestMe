@@ -22,7 +22,7 @@ class FavoriteController extends Controller
           }])
           ->get();
 
-        return new BaseJsonResource($favorites->map(function ($favorite) {
+        return new BaseJsonResource($favorites->filter(function ($favorite) { return $favorite->question; })->map(function ($favorite) {
           return [
             'question' => new QuestionResource($favorite->question),
             'createdAt' => $favorite->created_at,

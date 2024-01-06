@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Favorite extends Model
-{
-    use HasFactory;
+class Favorite extends Model {
+  use HasFactory;
 
-    protected $table = "favorites";
-    protected $guarded = [];
+  protected $table = "favorites";
+  protected $guarded = [];
 
   public function question() {
     return $this->belongsTo(Question::class, 'question_id');

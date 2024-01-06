@@ -280,9 +280,9 @@ class TestController extends Controller
 }
 
 
-//        ->where(function ($query) use ($search) {
-//          $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
-//            ->orWhereHas('answers', function ($subQuery) use ($search) {
-//              $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
-//            });
-//        })
+// ->where(function ($query) use ($search) {
+//  $query->whereRaw('lower(question) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%'])
+//    ->orWhereHas('answers', function ($subQuery) use ($search) {
+//      $subQuery->whereRaw('lower(answer) COLLATE NOCASE LIKE ?', ['%' . strtolower($search) . '%']);
+//    });
+// })

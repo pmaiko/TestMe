@@ -85,7 +85,7 @@ class QuestionController extends Controller
           "answers.*.answer" => "required_without:answers.*.answer_id|string|max:255",
           "answers.*.description" => "nullable|string|max:255",
           "answers.*.correct" => "boolean",
-//            "answers.*.answer" => "required_with:answers.*.answer_id|string", // Обязательное поле, если answer_id присутствует
+          // "answers.*.answer" => "required_with:answers.*.answer_id|string", // Обязательное поле, если answer_id присутствует
       ]);
 
       $question = Question::where("id", $fields['question_id'])->where("test_id", $fields["test_id"])->first();

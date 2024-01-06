@@ -8,7 +8,7 @@
     >
       <v-row v-if="!loading">
         <v-col
-          v-if="!results"
+          v-if="!_get(results, 'length', '')"
           cols="12"
         >
           <VEmpty>
