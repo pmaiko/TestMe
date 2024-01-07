@@ -160,6 +160,13 @@ class Api {
     })
   }
 
+  getResultsDashboard = async (testId) => {
+    return window.axios({
+      url: `/results/${testId}/dashboard`,
+      method: 'GET'
+    })
+  }
+
   getTestAttempt = async (testId, attempt) => {
     return window.axios({
       url: `/results/${testId}/${attempt}`,

@@ -25,6 +25,75 @@ class ResultController extends Controller {
     return new BaseJsonResource($tests);
   }
 
+  public function dashboard (Request $request) {
+    $data = Result::query()
+      ->where('user_id', auth()->user()->id)
+      ->where('test_id', $request->testId)
+      ->get();
+
+    $count = $data->count();
+    $time = CarbonInterval::seconds();
+    $countQuestions = null;
+    $countSuccesses = null;
+    $countErrors = null;
+    $countMisses = null;
+    $percentage = null;
+
+    $data->each(function ($item) use (&$time, &$countQuestions, &$countSuccesses, &$countErrors, &$countMisses, &$percentage) {
+      $time->add(CarbonInterval::createFromFormat('d:h:i:s', $item->time));
+      $countQuestions = max($countQuestions, $item->count_questions);
+      $countSuccesses+= $item->count_successes;
+      $countErrors+= $item->count_errors;
+      $countMisses+= $item->count_misses;
+      $percentage+= $item->percentage;
+    });
+
+    return new BaseJsonResource([
+      [
+        'count' => [
+          'label' => 'Кількість спроб',
+          'value' => $count
+        ],
+      ],
+      [
+        'countQuestions' => [
+          'label' => 'Кількість питань',
+          'value' => $countQuestions
+        ],
+      ],
+      [
+        'time' => [
+          'label' => 'Середній час виконання',
+          'value' => $time->divide($count)->cascade()->format('%dдн. %hгод. %iхв. %sсек.')
+        ],
+      ],
+      [
+        'countSuccesses' => [
+          'label' => 'Середня кількість успішних відповідей',
+          'value' => round($countSuccesses / $count, 2)
+        ],
+      ],
+      [
+        'countErrors' => [
+          'label' => 'Середня кількість помилок',
+          'value' => round($countErrors / $count, 2)
+        ],
+      ],
+      [
+        'countMisses' => [
+          'label' => 'Середня кількість пропусків',
+          'value' => round($countMisses / $count, 2)
+        ],
+      ],
+      [
+        'percentage' => [
+          'label' => 'Середній відсоток',
+          'value' => round($percentage / $count, 2) . '%'
+        ]
+      ]
+    ]);
+  }
+
   public function attempts (Request $request) {
     $attempts = Result::query()
       ->where('user_id', auth()->user()->id)

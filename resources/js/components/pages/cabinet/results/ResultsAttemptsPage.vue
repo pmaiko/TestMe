@@ -18,6 +18,15 @@
         <v-col
           v-else
         >
+          <ResultsDashboard
+            class="mb-8"
+          />
+
+          <ResultsChart
+            class="mb-8"
+            :attempts="attempts"
+          />
+
           <v-table
             fixed-header
             height="100%"
@@ -74,7 +83,7 @@
                 <td class="text-grey font-weight-bold">
                   {{ attempt.countMisses || '-' }}
                 </td>
-                <td>{{ attempt.percentage }}%</td>
+                <td class="text-teal font-weight-bold">{{ attempt.percentage }}%</td>
                 <td class="text-no-wrap">
                   <router-link
                     :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }"
@@ -99,6 +108,8 @@
   import VLoader from '~/components/UI/VLoader.vue'
   import VEmpty from '~/components/UI/VEmpty.vue'
   import { useFormattedDate } from '~/composables/useDate'
+  import ResultsDashboard from '~/components/shared/results/ResultsDashboard.vue'
+  import ResultsChart from '~/components/shared/results/ResultsChart.vue'
 
   const attempts = ref([])
   const loading = ref(true)
@@ -107,8 +118,8 @@
   const getResultsAttempts = async () => {
     try {
       loading.value = true
-      const { data } = await useApi().getResultsAttempts(testId)
-      attempts.value = data.data
+      const { data: { data } } = await useApi().getResultsAttempts(testId)
+      attempts.value = data
     } catch (error) {
       console.error(error)
     } finally {
