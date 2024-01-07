@@ -17,10 +17,10 @@
             class="text-wrap mb-1"
             :class="[
               {'text-h4': item.type !== 'time'},
-              {'text-h5': item.type === 'time'}
+              {'text-h5': item.type === 'time' || item.type === 'timeMin'}
             ]"
           >
-            {{ item.value }}
+            <span v-html="item.value" />
           </v-card-title>
           <v-card-subtitle class="text-wrap text-subtitle-1">
             {{ item.label }}
@@ -45,14 +45,31 @@
   const getResultsDashboard = async () => {
     try {
       const { data: { data } } = await useApi().getResultsDashboard(testId)
+      // '&#9660;'
+      // '&#9650;'
       const colors = {
         count: 'cyan',
+
         time: 'purple',
+        timeMin: 'purple',
+
         countQuestions: 'orange',
+
         countSuccesses: 'green',
+        countMinSuccesses: 'green',
+        countMaxSuccesses: 'green',
+
         countErrors: 'red',
+        countMinErrors: 'red',
+        countMaxErrors: 'red',
+
         countMisses: '',
-        percentage: 'teal'
+        countMinMisses: '',
+        countMaxMisses: '',
+
+        percentage: 'teal',
+        percentageMin: 'teal',
+        percentageMax: 'teal'
       }
       dashboardData.value = data.map((item) => {
         const [tmp] = Object.entries(item)

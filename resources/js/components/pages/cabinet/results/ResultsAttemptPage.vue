@@ -30,6 +30,7 @@
                 :answers="result.answers"
                 :answer="result.answer"
                 :diff="result.diff"
+                :number="index + 1"
               />
             </v-col>
           </v-row>

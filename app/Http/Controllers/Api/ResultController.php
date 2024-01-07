@@ -33,19 +33,75 @@ class ResultController extends Controller {
 
     $count = $data->count();
     $time = CarbonInterval::seconds();
-    $countQuestions = null;
-    $countSuccesses = null;
-    $countErrors = null;
-    $countMisses = null;
-    $percentage = null;
+    $timeMin = null;
 
-    $data->each(function ($item) use (&$time, &$countQuestions, &$countSuccesses, &$countErrors, &$countMisses, &$percentage) {
-      $time->add(CarbonInterval::createFromFormat('d:h:i:s', $item->time));
+    $countQuestions = null;
+
+    $countSuccesses = null;
+    $countMinSuccesses = null;
+    $countMaxSuccesses = null;
+
+    $countErrors = null;
+    $countMinErrors = null;
+    $countMaxErrors = null;
+
+    $countMisses = null;
+    $countMinMisses = null;
+    $countMaxMisses = null;
+
+    $percentage = null;
+    $percentageMin = null;
+    $percentageMax = null;
+
+    $data->each(function ($item) use (
+      &$time,
+      &$timeMin,
+
+      &$countQuestions,
+
+      &$countSuccesses,
+      &$countMinSuccesses,
+      &$countMaxSuccesses,
+
+      &$countErrors,
+      &$countMinErrors,
+      &$countMaxErrors,
+
+      &$countMisses,
+      &$countMinMisses,
+      &$countMaxMisses,
+
+      &$percentage,
+      &$percentageMin,
+      &$percentageMax
+    ) {
+      $formattedTime  = CarbonInterval::createFromFormat('d:h:i:s', $item->time);
+      $time->add($formattedTime);
+      if (!$timeMin) {
+        $timeMin = $formattedTime;
+      } else {
+        $timeMinSec = $timeMin->total('seconds');
+        $formattedTimeSec = $formattedTime->total('seconds');
+        $timeMin = $timeMinSec < $formattedTimeSec ? $timeMin : $formattedTime;
+      }
+
       $countQuestions = max($countQuestions, $item->count_questions);
+
       $countSuccesses+= $item->count_successes;
+      $countMinSuccesses = min($countMinSuccesses, $item->count_successes);
+      $countMaxSuccesses = max($countMaxSuccesses, $item->count_successes);
+
       $countErrors+= $item->count_errors;
+      $countMinErrors = min($countMinErrors, $item->count_errors);
+      $countMaxErrors = max($countMaxErrors, $item->count_errors);
+
       $countMisses+= $item->count_misses;
+      $countMinMisses = min($countMinMisses, $item->count_misses);
+      $countMaxMisses = max($countMaxMisses, $item->count_misses);
+
       $percentage+= $item->percentage;
+      $percentageMin = min($percentageMin, $item->percentage);
+      $percentageMax = max($percentageMax, $item->percentage);
     });
 
     return new BaseJsonResource([
@@ -62,9 +118,27 @@ class ResultController extends Controller {
         ],
       ],
       [
+        'timeMin' => [
+          'label' => 'Найменший час виконання',
+          'value' => $timeMin->cascade()->format('%dдн. %hгод. %iхв. %sсек.')
+        ],
+      ],
+      [
         'time' => [
           'label' => 'Середній час виконання',
           'value' => $time->divide($count)->cascade()->format('%dдн. %hгод. %iхв. %sсек.')
+        ],
+      ],
+      // [
+      //   'countMinSuccesses' => [
+      //     'label' => 'Найменше успішних відповідей',
+      //     'value' => $countMinSuccesses ?? 0
+      //   ],
+      // ],
+      [
+        'countMaxSuccesses' => [
+          'label' => 'Найбільше успішних відповідей',
+          'value' => $countMaxSuccesses ?? 0
         ],
       ],
       [
@@ -73,10 +147,36 @@ class ResultController extends Controller {
           'value' => round($countSuccesses / $count, 2)
         ],
       ],
+
+      // [
+      //   'countMinErrors' => [
+      //     'label' => 'Найменше помилок',
+      //     'value' => $countMinErrors ?? 0
+      //   ],
+      // ],
+      [
+        'countMinErrors' => [
+          'label' => 'Найбільше помилок',
+          'value' => $countMaxErrors ?? 0
+        ],
+      ],
       [
         'countErrors' => [
           'label' => 'Середня кількість помилок',
           'value' => round($countErrors / $count, 2)
+        ],
+      ],
+
+      // [
+      //   'countMinMisses' => [
+      //     'label' => 'Найменше пропусків',
+      //     'value' => $countMinMisses ?? 0
+      //   ],
+      // ],
+      [
+        'countMaxMisses' => [
+          'label' => 'Найбільше пропусків',
+          'value' => $countMaxMisses ?? 0
         ],
       ],
       [
@@ -84,6 +184,19 @@ class ResultController extends Controller {
           'label' => 'Середня кількість пропусків',
           'value' => round($countMisses / $count, 2)
         ],
+      ],
+
+      // [
+      //   'percentageMin' => [
+      //     'label' => 'Найменший відсоток',
+      //     'value' => ($percentageMin ?? 0) . '%'
+      //   ]
+      // ],
+      [
+        'percentageMax' => [
+          'label' => 'Найбільший відсоток',
+          'value' => ($percentageMax ?? 0) . '%'
+        ]
       ],
       [
         'percentage' => [

@@ -71,6 +71,7 @@ export default {
   test: 'Тест',
   attempt: 'Спроба',
   time: 'Час проходження',
+  date: 'Дата проходження',
   countQuestions: 'Кількість питань',
   countSuccesses: 'Кількість правильних',
   countErrors: 'Кількість помилок',
@@ -84,5 +85,6 @@ export default {
   emptyFavorites: 'Покищо немає улюблених',
   createdAt: 'Дата створення',
   updatedAt: 'Дата оновлення',
-  addedAt: 'Дата додавання'
+  addedAt: 'Дата додавання',
+  details: 'Детальніше'
 }

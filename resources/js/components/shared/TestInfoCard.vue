@@ -4,10 +4,9 @@
   >
     <template #title>
       <div class="d-flex justify-space-between">
-        <!--{{ index + 1 }}.-->
         <span
           class="text-subtitle-1 text-md-h6 text-wrap font-weight-bold"
-          v-html="question"
+          v-html="number ? `${number}. ${question}` : question"
         />
 
         <FavoriteButton
@@ -111,7 +110,8 @@
 
     answer: Object,
     diff: String,
-    deleteIcon: String
+    deleteIcon: String,
+    number: Number
   })
 
   const correctAnswer = computed(() => {

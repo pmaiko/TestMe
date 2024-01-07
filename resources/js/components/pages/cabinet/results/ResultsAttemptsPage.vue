@@ -33,30 +33,31 @@
           >
             <thead>
               <tr>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('attempt') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('time') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('countQuestions') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('countSuccesses') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('countErrors') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('countMisses') }}
                 </th>
-                <th class="text-left">
+                <th class="text-left text-no-wrap">
                   {{ $t('percentage') }}
                 </th>
-                <th class="text-left">
-                  {{ '-' }}
+                <th class="text-left text-no-wrap">
+                  {{ $t('date') }}
                 </th>
+                <th class="text-left text-no-wrap" />
               </tr>
             </thead>
             <tbody>
@@ -83,13 +84,18 @@
                 <td class="text-grey font-weight-bold">
                   {{ attempt.countMisses || '-' }}
                 </td>
-                <td class="text-teal font-weight-bold">{{ attempt.percentage }}%</td>
+                <td class="text-teal font-weight-bold">
+                  {{ attempt.percentage }}%
+                </td>
+                <td class="text-no-wrap">
+                  {{ useFormattedDate(attempt.createdAt).formattedDateTime || '-' }}
+                </td>
                 <td class="text-no-wrap">
                   <router-link
                     :to="{ name: 'results-test-attempt', params: { testId, attemptId: attempt.attemptId } }"
                     class="text-blue text-decoration-none"
                   >
-                    {{ useFormattedDate(attempt.createdAt).formattedDateTime || '-' }}
+                    {{ $t('details') }}
                   </router-link>
                 </td>
               </tr>
