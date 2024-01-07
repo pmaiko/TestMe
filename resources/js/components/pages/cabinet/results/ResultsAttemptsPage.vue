@@ -58,6 +58,7 @@
                   {{ $t('date') }}
                 </th>
                 <th class="text-left text-no-wrap" />
+                <th class="text-left text-no-wrap" />
               </tr>
             </thead>
             <tbody>
@@ -98,9 +99,52 @@
                     {{ $t('details') }}
                   </router-link>
                 </td>
+                <td class="text-no-wrap">
+                  <v-btn
+                    icon="mdi-trash-can-outline"
+                    color="red"
+                    size="x-small"
+                    @click="onOpenDialog(attempt)"
+                  />
+                </td>
               </tr>
             </tbody>
           </v-table>
+
+          <v-dialog
+            v-model="dialog"
+            persistent
+            width="360"
+            max-width="100%"
+          >
+            <v-card>
+              <v-card-title class="text-h5 overflow-visible text-wrap">
+                {{ $t('reallyWantDeleteAttempt.title') }} - <span class="font-weight-bold">#{{ _get(possibleDeleteAttempt, 'attemptId', '') }}</span>?
+              </v-card-title>
+              <v-card-text>
+                {{ $t('reallyWantDeleteAttempt.description') }}
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  color="green-darken-1"
+                  variant="text"
+                  @click="onCloseDialog"
+                >
+                  {{ $t('reallyWantDeleteAttempt.no') }}
+                </v-btn>
+                <v-btn
+                  :loading="loading"
+                  color="red-darken-1"
+                  variant="text"
+                  class="font-weight-bold"
+                  @click="onDeleteAttempt"
+                >
+                  {{ $t('reallyWantDeleteAttempt.yes') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
       <VLoader
@@ -121,6 +165,9 @@
   const loading = ref(true)
 
   const testId = useRoute().params.testId
+  const dialog = ref(false)
+  const possibleDeleteAttempt = ref(null)
+
   const getResultsAttempts = async () => {
     try {
       loading.value = true
@@ -131,6 +178,29 @@
     } finally {
       loading.value = false
     }
+  }
+
+  const deleteTestAttempt = async () => {
+    try {
+      await useApi().deleteTestAttempt(testId, _get(possibleDeleteAttempt.value, 'attemptId', ''))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onOpenDialog = (attempt) => {
+    dialog.value = true
+    possibleDeleteAttempt.value = attempt
+  }
+  const onCloseDialog = () => {
+    dialog.value = false
+    possibleDeleteAttempt.value = null
+  }
+
+  const onDeleteAttempt = async () => {
+    await deleteTestAttempt()
+    onCloseDialog()
+    await getResultsAttempts()
   }
 
   onMounted(() => {

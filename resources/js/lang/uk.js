@@ -86,5 +86,11 @@ export default {
   createdAt: 'Дата створення',
   updatedAt: 'Дата оновлення',
   addedAt: 'Дата додавання',
-  details: 'Детальніше'
+  details: 'Детальніше',
+  reallyWantDeleteAttempt: {
+    title: 'Ви дійсно бажаєте видалити спробу',
+    description: '---',
+    yes: 'Видалити спробу',
+    no: 'Відмінити'
+  }
 }

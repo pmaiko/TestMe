@@ -16,6 +16,7 @@ class CreateResultAttemptsTable extends Migration
         Schema::create('result_attempts', function (Blueprint $table) {
           $table->id();
 
+          $table->boolean('completed')->default(false);
           $table->unsignedBigInteger('test_id')->unsigned()->nullable();
           $table->unsignedBigInteger('user_id')->unsigned()->nullable();
 

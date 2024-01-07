@@ -59,7 +59,7 @@
         @click="onOpenDialog"
       >
         <template #prepend>
-          <v-icon icon="mdi mdi-delete-empty-outline" />
+          <v-icon icon="mdi mdi-trash-can-outline" />
         </template>
         {{ $t('delete') }}
       </v-btn>

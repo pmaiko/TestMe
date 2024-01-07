@@ -174,6 +174,13 @@ class Api {
     })
   }
 
+  deleteTestAttempt = async (testId, attempt) => {
+    return window.axios({
+      url: `/results/${testId}/${attempt}`,
+      method: 'DELETE'
+    })
+  }
+
   setAnswer = async (data) => {
     return window.axios({
       url: '/results/set-answer',

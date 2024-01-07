@@ -57,5 +57,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/results/{testId}', [ResultController::class, 'attempts']);
   Route::get('/results/{testId}/dashboard', [ResultController::class, 'dashboard']);
   Route::get('/results/{testId}/{attemptId}', [ResultController::class, 'attempt']);
+  Route::delete('/results/{testId}/{attemptId}', [ResultController::class, 'delete']);
   Route::post('/results/set-answer', [ResultController::class, 'setAnswer']);
 });

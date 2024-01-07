@@ -8,7 +8,9 @@ use App\Http\Resources\AnswerResource;
 use App\Http\Resources\BaseJsonResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Result;
+use App\Models\ResultAttempt;
 use App\Models\ResultAttemptQuestion;
+use App\Models\ResultAttemptQuestionAnswer;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
@@ -311,6 +313,16 @@ class ResultController extends Controller {
     }));
   }
 
+  function delete (Request $request) {
+    $attemptId = $request->attemptId;
+
+    Result::query()->where('attempt_id', $attemptId)->delete();
+    ResultAttemptQuestion::query()->where('attempt_id', $attemptId)->delete();
+    ResultAttemptQuestionAnswer::query()->where('attempt_id', $attemptId)->delete();
+    ResultAttempt::query()->where('id', $attemptId)->delete();
+
+    return response()->json('ok');
+  }
 
   function setAnswer (Request $request) {
     $userId = auth()->user()->id;

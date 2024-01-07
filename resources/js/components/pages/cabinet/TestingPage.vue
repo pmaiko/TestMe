@@ -23,6 +23,7 @@
             v-model="activeQuestion"
             :questions="questions"
             :userAnswers="userAnswers"
+            @update:modelValue="scrollTop"
           />
 
           <v-dialog
@@ -175,6 +176,11 @@
       getTestLoading.value = false
     }
   }
+
+  const scrollTop = () => {
+    window.scrollTo(0, 0)
+  }
+
   onMounted(() => {
     getTest()
   })

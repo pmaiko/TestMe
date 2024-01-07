@@ -17,11 +17,13 @@ class CreateResultAttemptQuestionAnswersTable extends Migration
           $table->id();
 
 
+          $table->unsignedBigInteger('attempt_id')->unsigned()->nullable();
           $table->unsignedBigInteger('result_attempt_question_id')->unsigned()->nullable();
           $table->unsignedBigInteger('answer_id')->unsigned()->nullable();
 
+          $table->foreign('attempt_id')->references('id')->on('result_attempts')->onDelete('cascade');
           $table->foreign('result_attempt_question_id')->references('id')->on('result_attempt_questions')->onDelete('cascade');
-          $table->foreign('answer_id')->references('id')->on('answers')->onDelete('set null');
+          $table->foreign('answer_id')->references('id')->on('answers')->onDelete('cascade');
 
           $table->timestamps();
         });

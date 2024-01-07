@@ -110,8 +110,9 @@ class TestController extends Controller
           'user_id' => $userId,
         ]);
 
-        $question->answers->each(function (Answer $answer) use ($testsResult) {
+        $question->answers->each(function (Answer $answer) use ($testsResult, $attemptId) {
           ResultAttemptQuestionAnswer::query()->create([
+            'attempt_id' => $attemptId,
             'answer_id' => $answer->id,
             'result_attempt_question_id' => $testsResult->id
           ]);
@@ -255,6 +256,13 @@ class TestController extends Controller
       });
 
       $percentage = ($countSuccesses / $countQuestions) * 100;
+
+      ResultAttempt::query()
+        ->where('test_id', $testId)
+        ->where('user_id', $userId)
+        ->update([
+          'completed' => true
+        ]);
 
       $result = Result::query()->create([
         'time' => $time->cascade()->format('%D:%H:%I:%S'),

@@ -14,7 +14,7 @@
           class="ml-auto mr-4"
           @click.stop="onOpenDialog(question)"
         >
-          <v-icon>mdi-delete-empty-outline</v-icon>
+          <v-icon>mdi-trash-can-outline</v-icon>
           {{ $t('delete') }}
         </v-btn>
 
