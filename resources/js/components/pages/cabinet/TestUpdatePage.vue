@@ -4,7 +4,7 @@
   >
     <v-container
       fluid
-      class="h-100"
+      class="flex-1-0 d-flex flex-column"
     >
       <v-row v-if="!getTestLoading">
         <v-col

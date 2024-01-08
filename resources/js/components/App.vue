@@ -60,7 +60,7 @@
       </button>
     </v-app-bar>
 
-    <v-main class="mb-8">
+    <v-main class="d-flex flex-column">
       <router-view class="page-content" />
     </v-main>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="default-page h-100">
+  <div class="default-page flex-1-0 d-flex flex-column">
     <v-breadcrumbs
       v-if="_get(breadcrumbs, 'length', '')"
       :items="breadcrumbs"

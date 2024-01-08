@@ -1,6 +1,9 @@
 <template>
   <div class="cabinet-page">
-    <v-container fluid>
+    <v-container
+      fluid
+      class="flex-1-0 d-flex flex-column"
+    >
       cabinet-page
     </v-container>
   </div>

@@ -4,7 +4,7 @@
   >
     <v-container
       fluid
-      class="tests-page h-100"
+      class="flex-1-0 d-flex flex-column"
     >
       <TestForm
         :title="$t('newTest')"

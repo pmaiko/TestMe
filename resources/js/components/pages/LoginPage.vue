@@ -2,12 +2,12 @@
   <DefaultPage>
     <v-container
       fluid
-      class="login-page fill-height"
+      class="flex-1-0 d-flex flex-column"
     >
       <v-row
         align="center"
         justify="center"
-        class="fill-height"
+        class="h-100"
       >
         <v-col
           sm="8"

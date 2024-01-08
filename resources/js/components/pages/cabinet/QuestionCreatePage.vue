@@ -4,6 +4,7 @@
   >
     <v-container
       fluid
+      class="flex-1-0 d-flex flex-column"
     >
       <QuestionForm
         :key="resetKey"
