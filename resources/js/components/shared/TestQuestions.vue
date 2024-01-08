@@ -4,6 +4,13 @@
     :key="question.id"
     class="mb-12"
   >
+    <div
+      v-if="question.updatedAt"
+      class="text-caption mb-2"
+    >
+      {{ $t('updatedAt') }}: <span class="font-weight-bold">{{ useFormattedDate(question.updatedAt).formattedDateTime }}</span>
+    </div>
+
     <TestInfoCard
       v-bind="question"
     >

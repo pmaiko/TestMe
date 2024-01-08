@@ -12,7 +12,6 @@ class QuestionResource extends BaseJsonResource
      */
     public function toArray($request)
     {
-//      'testId' => data_get($this, 'test_id'),
       return [
         'id' => $this->id,
         'userId' => $this->user_id,
@@ -22,9 +21,7 @@ class QuestionResource extends BaseJsonResource
         'createdAt' => $this->created_at,
         'updatedAt' => $this->updated_at,
 //        'answers' => new AnswerCollection($this->answers()->select(['id', 'answer', 'description', 'correct'])->get())
-        'answers' => new AnswerCollection($this->answers)
+        'answers' => new AnswerCollection($this->whenLoaded('answers'))
       ];
-
-//      return parent::toArray($request);
     }
 }

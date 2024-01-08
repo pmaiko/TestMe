@@ -37,6 +37,9 @@ class TestController extends Controller
 
       $sortedQuestions = $test
         ->questions()
+        ->with(['answers' => function ($query) {
+          $query->select(['question_id', 'id', 'answer', 'description', 'correct']);
+        }])
         ->select(['test_id', 'id', 'question', 'description', 'created_at', 'updated_at'])
         ->where(function ($query) use ($search) {
           $query->where(DB::raw('lower(question)'), 'like', '%' . strtolower($search) . '%')
@@ -45,6 +48,7 @@ class TestController extends Controller
             });
         })
         ->orderBy('id', $order)
+        // ->orderBy('updated_at', $order)
         ->paginate(150);
 
       $test->questions = [
@@ -89,7 +93,7 @@ class TestController extends Controller
         }, 'questions.answers' => function  ($query) {
           $query
           ->select(['question_id', 'id', 'answer', 'description', 'correct'])
-          ->inRandomOrder(1);
+          ->inRandomOrder();
         }])
         ->first();
 
@@ -107,24 +111,50 @@ class TestController extends Controller
 
       $attemptId = $attempt->id;
 
-      $test->questions->each(function (Question $question) use ($attemptId, $testId, $userId) {
+      $resultAttemptQuestionsData = [];
+      $test->questions->each(function (Question $question) use (&$resultAttemptQuestionsData, $attemptId, $testId, $userId) {
         $question_id = $question->id;
 
-        $testsResult = ResultAttemptQuestion::query()->create([
+        $resultAttemptQuestionsData[] = [
           'attempt_id' => $attemptId,
           'test_id' => $testId,
           'question_id' => $question_id,
           'user_id' => $userId,
-        ]);
-
-        $question->answers->each(function (Answer $answer) use ($testsResult, $attemptId) {
-          ResultAttemptQuestionAnswer::query()->create([
-            'attempt_id' => $attemptId,
-            'answer_id' => $answer->id,
-            'result_attempt_question_id' => $testsResult->id
-          ]);
-        });
+          'created_at' => now(),
+          'updated_at' => now()
+        ];
       });
+
+      ResultAttemptQuestion::query()->insert($resultAttemptQuestionsData);
+      $resultAttemptQuestions = ResultAttemptQuestion::query()
+        ->where('attempt_id', $attemptId)
+        ->where('test_id', $testId)
+        ->where('user_id', $userId)
+        ->select('id', 'question_id')
+        ->get();
+
+      $resultAttemptQuestionAnswersData = [];
+      $test->questions->each(function (Question $question) use (&$resultAttemptQuestionAnswersData, $resultAttemptQuestions, $attemptId) {
+        $questionId = $question->id;
+
+        $finedId = optional($resultAttemptQuestions->first(function ($resultAttemptQuestion) use ($questionId) {
+          return (string)($resultAttemptQuestion->question_id) === (string)($questionId);
+        }))->id;
+
+        if (isset($finedId)) {
+          $question->answers->each(function (Answer $answer) use (&$resultAttemptQuestionAnswersData, $finedId, $attemptId) {
+            $resultAttemptQuestionAnswersData[] = [
+              'attempt_id' => $attemptId,
+              'answer_id' => $answer->id,
+              'result_attempt_question_id' => $finedId,
+              'created_at' => now(),
+              'updated_at' => now()
+            ];
+          });
+        }
+      });
+
+      ResultAttemptQuestionAnswer::query()->insert($resultAttemptQuestionAnswersData);
 
       return new BaseJsonResource([
         'questions' => new QuestionCollection($test->questions),
