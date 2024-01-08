@@ -92,5 +92,12 @@ export default {
     description: '---',
     yes: 'Видалити спробу',
     no: 'Відмінити'
-  }
+  },
+  dialogStart: {
+    title: 'Виберіть кількість питань',
+    description: 'aбо ведіть',
+    placeholder: 'Кількість питань',
+    no: 'Відмінити'
+  },
+  theme: 'Тема'
 }

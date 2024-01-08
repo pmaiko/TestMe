@@ -29,7 +29,6 @@
             >
               <v-card
                 class="mx-auto h-100 d-flex flex-column"
-                color="white"
                 variant="elevated"
                 elevation="6"
               >

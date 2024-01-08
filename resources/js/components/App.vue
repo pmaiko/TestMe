@@ -22,8 +22,8 @@
     <v-app-bar
       color="red"
       scroll-behavior="elevate fade-image inverted"
-      image="https://picsum.photos/1920/1080?random"
     >
+      <!--image="https://picsum.photos/1920/1080?random"-->
       <template
         v-if="logged"
         #prepend
@@ -40,15 +40,20 @@
           class="text-subtitle-1 font-weight-bold"
         >{{ _get(user, 'name', '') || '-' }}</span>
       </v-app-bar-title>
-      <!--<v-btn-->
-      <!--  v-if="logged"-->
-      <!--  icon-->
-      <!--&gt;-->
-      <!--  <v-icon>mdi-heart</v-icon>-->
-      <!--</v-btn>-->
+
+      <v-switch
+        :model-value="themeModel"
+        true-value="light"
+        false-value="dark"
+        hide-details
+        :label="$t('theme')"
+        class="mr-4 ml-auto flex-0-0"
+        @update:model-value="toggleTheme"
+      />
+
       <button
         v-if="logged"
-        class="mr-5"
+        class="mr-4"
         @click="logout"
       >
         {{ $t('exit') }}
@@ -78,10 +83,20 @@
   </v-app>
 </template>
 <script setup>
+  import { useTheme } from 'vuetify'
+
   const { logged, user, logout } = useAuth()
   const router = useRouter()
   const store = useStore()
 
+  const theme = useTheme()
+  const themeModel = ref(localStorage.getItem('theme') || null)
+  function toggleTheme () {
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    themeModel.value = theme.global.name.value
+    localStorage.setItem('theme', theme.global.name.value)
+  }
+  
   const items = ref([
     {
       label: $t('menu.tests'),

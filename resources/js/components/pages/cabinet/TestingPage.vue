@@ -167,7 +167,9 @@
   const getTest = async () => {
     try {
       getTestLoading.value = true
-      const { data: { data } } = await useApi().testing(route.params.test_id)
+      const { data: { data } } = await useApi().testing(route.params.test_id, {
+        countQuestions: route.query.countQuestions
+      })
       testData.value = data
       activeQuestion.value = _get(data, 'questions.0', '') || null
     } catch (error) {

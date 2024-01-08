@@ -28,9 +28,15 @@ const vuetify = createVuetify({
   components,
   directives,
   theme: {
+    defaultTheme: localStorage.getItem('theme') || 'light',
     themes: {
       light: {
-        dark: false,
+        colors: {
+          primary: colors.blue.base,
+          secondary: colors.pink.base
+        }
+      },
+      dark: {
         colors: {
           primary: colors.blue.base,
           secondary: colors.pink.base

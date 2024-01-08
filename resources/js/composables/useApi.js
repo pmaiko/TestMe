@@ -71,16 +71,16 @@ class Api {
 
   testUpdate = async (data) => {
     return window.axios({
-      url: '/test',
-      method: 'PUT',
+      url: '/test/put',
+      method: 'POST',
       data: removeEmptyFields(data)
     })
   }
 
   testDelete = async (data) => {
     return window.axios({
-      url: '/test',
-      method: 'DELETE',
+      url: '/test/delete',
+      method: 'POST',
       data: removeEmptyFields(data)
     })
   }
@@ -96,11 +96,12 @@ class Api {
   }
 
   // eslint-disable-next-line camelcase
-  testing = async (test_id) => {
+  testing = async (test_id, params) => {
     return window.axios({
       // eslint-disable-next-line camelcase
       url: `/test/${test_id}/testing`,
-      method: 'GET'
+      method: 'GET',
+      params: params || {}
     })
   }
 
@@ -130,16 +131,16 @@ class Api {
 
   questionUpdate = async (data) => {
     return window.axios({
-      url: '/question',
-      method: 'PUT',
+      url: '/question/put',
+      method: 'POST',
       data: removeEmptyFields(data)
     })
   }
 
   questionDelete = async (data) => {
     return window.axios({
-      url: '/question',
-      method: 'DELETE',
+      url: '/question/delete',
+      method: 'POST',
       data: removeEmptyFields(data)
     })
   }
@@ -176,8 +177,8 @@ class Api {
 
   deleteTestAttempt = async (testId, attempt) => {
     return window.axios({
-      url: `/results/${testId}/${attempt}`,
-      method: 'DELETE'
+      url: `/results/${testId}/${attempt}/delete`,
+      method: 'POST'
     })
   }
 
@@ -207,8 +208,8 @@ class Api {
 
   deleteFavorite = async (data) => {
     return window.axios({
-      url: '/favorite',
-      method: 'DELETE',
+      url: '/favorite/delete',
+      method: 'POST',
       data: removeEmptyFields(data)
     })
   }

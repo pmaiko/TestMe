@@ -33,13 +33,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
       //test
       Route::post('/test', [TestController::class, 'create']);
-      Route::put('/test', [TestController::class, 'update']);
-      Route::delete('/test', [TestController::class, 'delete']);
+      Route::post('/test/put', [TestController::class, 'update']);
+      Route::post('/test/delete', [TestController::class, 'delete']);
       //question
       Route::get('/question/{questionId}', [QuestionController::class, 'index']);
       Route::post('/question', [QuestionController::class, 'create']);
-      Route::put('/question', [QuestionController::class, 'update']);
-      Route::delete('/question', [QuestionController::class, 'delete']);
+      Route::post('/question/put', [QuestionController::class, 'update']);
+      Route::post('/question/delete', [QuestionController::class, 'delete']);
   });
 
   Route::get('/tests', [TestController::class, 'index']);
@@ -50,13 +50,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   //favorite
   Route::get('/favorites', [FavoriteController::class, 'index']);
   Route::post('/favorite', [FavoriteController::class, 'create']);
-  Route::delete('/favorite', [FavoriteController::class, 'delete']);
+  Route::post('/favorite/delete', [FavoriteController::class, 'delete']);
 
   //result
   Route::get('/results/tests', [ResultController::class, 'tests']);
   Route::get('/results/{testId}', [ResultController::class, 'attempts']);
   Route::get('/results/{testId}/dashboard', [ResultController::class, 'dashboard']);
   Route::get('/results/{testId}/{attemptId}', [ResultController::class, 'attempt']);
-  Route::delete('/results/{testId}/{attemptId}', [ResultController::class, 'delete']);
+  Route::post('/results/{testId}/{attemptId}/delete', [ResultController::class, 'delete']);
   Route::post('/results/set-answer', [ResultController::class, 'setAnswer']);
 });

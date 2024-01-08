@@ -115,7 +115,7 @@ class ResultController extends Controller {
       ],
       [
         'countQuestions' => [
-          'label' => 'Кількість питань',
+          'label' => 'Найбільше питань',
           'value' => $countQuestions
         ],
       ],

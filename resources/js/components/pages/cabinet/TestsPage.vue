@@ -36,8 +36,8 @@
             <v-col
               v-for="(test, index) in tests"
               :key="index"
-              md="4"
-              sm="6"
+              lg="4"
+              md="6"
               cols="12"
               class="h-auto"
             >

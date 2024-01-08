@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class TestController extends Controller
 {
@@ -73,12 +74,18 @@ class TestController extends Controller
     }
 
     public function testing (Request $request) {
+      $fields = $request->validate([
+        'countQuestions' =>  ['regex:/^(?:\d+|all)$/'],
+      ]);
+
+      $limit = Str::lower($request->countQuestions) === Str::lower('all') ? null : $request->countQuestions ?? 150;
+
       $test = Test::query()
         ->where('id', $request->testId)
-        ->with(['questions' => function ($query) {
+        ->with(['questions' => function ($query) use ($limit) {
           $query
             ->inRandomOrder()
-            ->limit(150);
+            ->limit($limit);
         }, 'questions.answers' => function  ($query) {
           $query
           ->select(['question_id', 'id', 'answer', 'description', 'correct'])
