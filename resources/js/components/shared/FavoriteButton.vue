@@ -48,7 +48,7 @@
         await deleteFromFavorite()
       }
 
-      await store.dispatch('favorites/fetch')
+      await store.dispatch('favorites/fetch', { forceLoad: true })
     }
   }
 

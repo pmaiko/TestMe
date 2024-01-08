@@ -25,8 +25,8 @@ export default {
   },
 
   actions: {
-    async fetch ({ state, commit }) {
-      if (!state.loading) {
+    async fetch ({ state, commit }, { forceLoad } = {}) {
+      if (!state.loading && (!state.favorites || forceLoad)) {
         try {
           commit('SET_LOADING', true)
 

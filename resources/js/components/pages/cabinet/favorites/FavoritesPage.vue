@@ -63,7 +63,7 @@
   })
 
   onMounted(() => {
-    store.dispatch('favorites/fetch')
+    store.dispatch('favorites/fetch', { forceLoad: true })
   })
 
   const breadcrumbs = computed(() => [

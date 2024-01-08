@@ -2,6 +2,9 @@ node -v 20.10.0
 
 https://testtestme.000webhostapp.com/
 
+php artisan optimize:clear
+php artisan cache:clear
+
 php artisan make:resource UserResource
 php artisan make:resource UserCollection
 

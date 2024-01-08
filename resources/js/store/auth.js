@@ -60,18 +60,19 @@ export default {
       }
     },
 
-    async getUserCurrent ({ dispatch }) {
-      try {
-        const { data } = await useApi().user()
-        await dispatch('setUser', { user: data })
-        return Promise.resolve(data)
-      } catch (error) {
-        localStorage.removeItem('token')
-        await dispatch('removeToken')
-        window.router.push({
-          name: 'login'
-        })
-        return Promise.reject(error)
+    async getUserCurrent ({ state, dispatch }, { forceLoad } = {}) {
+      if (!state.user || forceLoad) {
+        try {
+          const { data } = await useApi().user()
+          await dispatch('setUser', { user: data })
+          return Promise.resolve(data)
+        } catch (error) {
+          await dispatch('removeToken')
+          window.router.push({
+            name: 'login'
+          })
+          return Promise.reject(error)
+        }
       }
     }
   }
