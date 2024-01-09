@@ -265,7 +265,7 @@ class ResultController extends Controller {
         'answers' => function ($query) {
           $query
             ->select(['answer_id', 'result_attempt_question_id'])
-            ->with('answer:id,answer,correct,description')
+            // ->with('answer:id,answer,correct,description')
             ->orderBy('id', 'asc');
         },
       ])

@@ -144,7 +144,9 @@ class TestController extends Controller
         ];
       });
 
-      $resultAttemptQuestionsDataChunk = array_chunk($resultAttemptQuestionsData, 900);
+      $countChunks = 151;
+
+      $resultAttemptQuestionsDataChunk = array_chunk($resultAttemptQuestionsData, $countChunks);
       foreach ($resultAttemptQuestionsDataChunk as $chunk) {
         ResultAttemptQuestion::query()->insert($chunk);
       }
@@ -177,7 +179,7 @@ class TestController extends Controller
         }
       });
 
-      $resultAttemptQuestionAnswersDataChunk = array_chunk($resultAttemptQuestionAnswersData, 900);
+      $resultAttemptQuestionAnswersDataChunk = array_chunk($resultAttemptQuestionAnswersData, $countChunks);
       foreach ($resultAttemptQuestionAnswersDataChunk as $chunk) {
         ResultAttemptQuestionAnswer::query()->insert($chunk);
       }

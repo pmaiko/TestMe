@@ -2,6 +2,8 @@ node -v 20.10.0
 
 https://testtestme.000webhostapp.com/
 
+[//]: # (SQLITE_MAX_VARIABLE_NUMBER 166)
+
 php artisan optimize:clear
 php artisan cache:clear
 
