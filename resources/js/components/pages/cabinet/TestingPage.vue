@@ -4,7 +4,7 @@
       fluid
       class="flex-1-0 d-flex flex-column"
     >
-      <v-row class="h-100">
+      <v-row class="h-100 d-flex flex-column">
         <v-col v-if="!getTestLoading && _get(testData, 'questions.length', '')">
           <TestingCard
             :key="_get(activeQuestion, 'id', '')"

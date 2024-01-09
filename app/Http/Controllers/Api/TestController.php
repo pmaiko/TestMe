@@ -111,24 +111,76 @@ class TestController extends Controller
 
       $attemptId = $attempt->id;
 
-      $test->questions->each(function (Question $question) use ($attemptId, $testId, $userId) {
+      // $test->questions->each(function (Question $question) use ($attemptId, $testId, $userId) {
+      //   $question_id = $question->id;
+      //
+      //   $resultAttemptQuestion = ResultAttemptQuestion::query()->create([
+      //     'attempt_id' => $attemptId,
+      //     'test_id' => $testId,
+      //     'question_id' => $question_id,
+      //     'user_id' => $userId,
+      //   ]);
+      //
+      //   $question->answers->each(function (Answer $answer) use ($resultAttemptQuestion, $attemptId) {
+      //     ResultAttemptQuestionAnswer::query()->create([
+      //       'attempt_id' => $attemptId,
+      //       'answer_id' => $answer->id,
+      //       'result_attempt_question_id' => $resultAttemptQuestion->id
+      //     ]);
+      //   });
+      // });
+
+      $resultAttemptQuestionsData = [];
+      $test->questions->each(function (Question $question) use (&$resultAttemptQuestionsData, $attemptId, $testId, $userId) {
         $question_id = $question->id;
 
-        $resultAttemptQuestion = ResultAttemptQuestion::query()->create([
+        $resultAttemptQuestionsData[] = [
           'attempt_id' => $attemptId,
           'test_id' => $testId,
           'question_id' => $question_id,
           'user_id' => $userId,
-        ]);
-
-        $question->answers->each(function (Answer $answer) use ($resultAttemptQuestion, $attemptId) {
-          ResultAttemptQuestionAnswer::query()->create([
-            'attempt_id' => $attemptId,
-            'answer_id' => $answer->id,
-            'result_attempt_question_id' => $resultAttemptQuestion->id
-          ]);
-        });
+          'created_at' => now(),
+          'updated_at' => now()
+        ];
       });
+
+      $resultAttemptQuestionsDataChunk = array_chunk($resultAttemptQuestionsData, 900);
+      foreach ($resultAttemptQuestionsDataChunk as $chunk) {
+        ResultAttemptQuestion::query()->insert($chunk);
+      }
+
+      $resultAttemptQuestions = ResultAttemptQuestion::query()
+        ->where('attempt_id', $attemptId)
+        ->where('test_id', $testId)
+        ->where('user_id', $userId)
+        ->select('id', 'question_id')
+        ->get();
+
+      $resultAttemptQuestionAnswersData = [];
+      $test->questions->each(function (Question $question) use (&$resultAttemptQuestionAnswersData, $resultAttemptQuestions, $attemptId) {
+        $questionId = $question->id;
+
+        $finedId = optional($resultAttemptQuestions->first(function ($resultAttemptQuestion) use ($questionId) {
+          return (string)($resultAttemptQuestion->question_id) === (string)($questionId);
+        }))->id;
+
+        if (isset($finedId)) {
+          $question->answers->each(function (Answer $answer) use (&$resultAttemptQuestionAnswersData, $finedId, $attemptId) {
+            $resultAttemptQuestionAnswersData[] = [
+              'attempt_id' => $attemptId,
+              'answer_id' => $answer->id,
+              'result_attempt_question_id' => $finedId,
+              'created_at' => now(),
+              'updated_at' => now()
+            ];
+          });
+        }
+      });
+
+      $resultAttemptQuestionAnswersDataChunk = array_chunk($resultAttemptQuestionAnswersData, 900);
+      foreach ($resultAttemptQuestionAnswersDataChunk as $chunk) {
+        ResultAttemptQuestionAnswer::query()->insert($chunk);
+      }
 
       return new BaseJsonResource([
         'questions' => new QuestionCollection($test->questions),
@@ -141,50 +193,6 @@ class TestController extends Controller
         'updatedAt' => $test->updated_at,
       ]);
 
-      // $resultAttemptQuestionsData = [];
-      // $test->questions->each(function (Question $question) use (&$resultAttemptQuestionsData, $attemptId, $testId, $userId) {
-      //   $question_id = $question->id;
-      //
-      //   $resultAttemptQuestionsData[] = [
-      //     'attempt_id' => $attemptId,
-      //     'test_id' => $testId,
-      //     'question_id' => $question_id,
-      //     'user_id' => $userId,
-      //     'created_at' => now(),
-      //     'updated_at' => now()
-      //   ];
-      // });
-      //
-      // ResultAttemptQuestion::query()->insert($resultAttemptQuestionsData);
-      // $resultAttemptQuestions = ResultAttemptQuestion::query()
-      //   ->where('attempt_id', $attemptId)
-      //   ->where('test_id', $testId)
-      //   ->where('user_id', $userId)
-      //   ->select('id', 'question_id')
-      //   ->get();
-      //
-      // $resultAttemptQuestionAnswersData = [];
-      // $test->questions->each(function (Question $question) use (&$resultAttemptQuestionAnswersData, $resultAttemptQuestions, $attemptId) {
-      //   $questionId = $question->id;
-      //
-      //   $finedId = optional($resultAttemptQuestions->first(function ($resultAttemptQuestion) use ($questionId) {
-      //     return (string)($resultAttemptQuestion->question_id) === (string)($questionId);
-      //   }))->id;
-      //
-      //   if (isset($finedId)) {
-      //     $question->answers->each(function (Answer $answer) use (&$resultAttemptQuestionAnswersData, $finedId, $attemptId) {
-      //       $resultAttemptQuestionAnswersData[] = [
-      //         'attempt_id' => $attemptId,
-      //         'answer_id' => $answer->id,
-      //         'result_attempt_question_id' => $finedId,
-      //         'created_at' => now(),
-      //         'updated_at' => now()
-      //       ];
-      //     });
-      //   }
-      // });
-      //
-      // ResultAttemptQuestionAnswer::query()->insert($resultAttemptQuestionAnswersData);
     }
 
     public function create (Request $request) {
