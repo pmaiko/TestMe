@@ -1,6 +1,7 @@
 <template>
   <v-card
     elevation="6"
+    class="print-card"
   >
     <template #title>
       <div class="d-flex justify-space-between">
@@ -9,10 +10,10 @@
           v-html="number ? `${number}. ${question}` : question"
         />
 
-        <FavoriteButton
+        <span class="print-hidden"><FavoriteButton
           :questionId="id"
           :deleteIcon="deleteIcon"
-        />
+        /></span>
       </div>
     </template>
 

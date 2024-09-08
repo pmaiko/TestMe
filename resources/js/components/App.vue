@@ -21,6 +21,7 @@
     </v-navigation-drawer>
     <v-app-bar
       color="red"
+      class="print-hidden"
       scroll-behavior="elevate fade-image inverted"
     >
       <!--image="https://picsum.photos/1920/1080?random"-->

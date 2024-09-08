@@ -3,7 +3,7 @@
     <v-breadcrumbs
       v-if="_get(breadcrumbs, 'length', '')"
       :items="breadcrumbs"
-      class="text-no-wrap overflow-x-auto"
+      class="text-no-wrap overflow-x-auto print-hidden"
     >
       <template #divider>
         <v-icon icon="mdi-chevron-right" />

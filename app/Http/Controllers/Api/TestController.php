@@ -14,12 +14,14 @@ use App\Models\ResultAttemptQuestion;
 use App\Models\ResultAttemptQuestionAnswer;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+// подивитись катомные реквесты
 class TestController extends Controller
 {
     public function index () {
@@ -43,13 +45,13 @@ class TestController extends Controller
         ->select(['test_id', 'id', 'question', 'description', 'created_at', 'updated_at'])
         ->where(function ($query) use ($search) {
           $query->where(DB::raw('lower(question)'), 'like', '%' . strtolower($search) . '%')
-            ->orWhereHas('answers', function ($subQuery) use ($search) {
+            ->orWhereHas('answers', function (Builder $subQuery) use ($search) {
               $subQuery->where(DB::raw('lower(answer)'), 'like', '%' . strtolower($search) . '%');
             });
         })
         ->orderBy('id', $order)
         // ->orderBy('updated_at', $order)
-        ->paginate(150);
+        ->paginate(2000); // for PDF default 150
 
       $test->questions = [
         'filters' => [],

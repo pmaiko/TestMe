@@ -30,20 +30,23 @@
 
           <v-divider
             id="divider"
-            class="my-8"
+            class="my-8 print-hidden"
           />
 
-          <v-row>
+          <v-row
+            class="print-m-0"
+          >
             <v-col
               cols="12"
-              class="px-sm-8"
+              class="px-sm-8 print-p-0"
             >
-              <p class="text-h6">
+              <p class="text-h6 print-hidden">
                 {{ $t('questions') }}
               </p>
               <v-row>
                 <v-col
                   cols="12"
+                  class="print-hidden"
                 >
                   <router-link
                     :to="{ name: 'test-update-question-create', params: { test_id: route.params.test_id } }"
@@ -62,7 +65,7 @@
                 </v-col>
                 <v-col
                   cols="12"
-                  class="mt-8"
+                  class="mt-8 print-hidden"
                 >
                   <v-row
                     justify="space-between"
@@ -98,6 +101,7 @@
                 </v-col>
                 <v-col
                   cols="12"
+                  class="print-hidden"
                 >
                   <div class="mx-n2">
                     <v-chip

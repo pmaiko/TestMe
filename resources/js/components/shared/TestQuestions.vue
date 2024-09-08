@@ -1,14 +1,15 @@
 <template>
   <div
-    v-for="question in questions"
+    v-for="(question, index) in questions"
     :key="question.id"
     class="mb-12"
+    style="page-break-inside: avoid;"
   >
     <div
       v-if="question.updatedAt"
       class="text-caption mb-2"
     >
-      {{ $t('updatedAt') }}: <span class="font-weight-bold">{{ useFormattedDate(question.updatedAt).formattedDateTime }}</span>
+      <span class="font-weight-bold text-h6">№{{ index + 1 }}</span> {{ $t('updatedAt') }}: <span class="font-weight-bold">{{ useFormattedDate(question.updatedAt).formattedDateTime }}</span>
     </div>
 
     <TestInfoCard

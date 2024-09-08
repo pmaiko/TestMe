@@ -1,8 +1,10 @@
 <template>
-  <VTitle>
+  <VTitle class="print-hidden">
     {{ props.title }}
   </VTitle>
-  <v-row>
+  <v-row
+    class="print-hidden"
+  >
     <v-col
       sm="6"
       cols="12"
